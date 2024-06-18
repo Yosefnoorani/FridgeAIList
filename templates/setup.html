@@ -5,37 +5,361 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Setup</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #000;
+            display: flex;
+            max-width: 480px;
+            width: 100%;
+            flex-direction: column;
+            margin: 0 auto;
+            padding: 24px 0;
+            box-sizing: border-box;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .section {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+            padding: 24px 16px;
+            box-sizing: border-box;
+        }
+        .header {
+            color: #69fff1;
+            font-size: 24px;
+            font-family: Inter, sans-serif;
+        }
+        .subheader {
+            color: #fff;
+            margin-top: 8px;
+            font-size: 16px;
+            font-family: Inter, sans-serif;
+        }
+        .title {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 400;
+            font-family: Inter, sans-serif;
+        }
+        .content {
+            display: flex;
+            margin-top: 24px;
+            gap: 20px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            background-color: #fff;
+            width: 40px;
+            height: 40px;
+            padding: 0 4px;
+            cursor: pointer;
+        }
+        .icon {
+            aspect-ratio: 7.14;
+            object-fit: contain;
+            object-position: center;
+            width: 14px;
+            fill: #000;
+        }
+        .number {
+            color: #fff;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 500;
+            font-family: Inter, sans-serif;
+            min-width: 50px;
+        }
+        .title-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .manage-button {
+            color: #69fff1;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: Inter, sans-serif;
+            cursor: pointer;
+        }
+        .tags, .tags-group {
+            display: flex;
+            margin-top: 16px;
+            gap: 8px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            font-size: 14px;
+            color: #fff;
+            font-weight: 500;
+            font-family: Inter, sans-serif;
+        }
+        .tag {
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            padding: 8px 12px;
+            white-space: nowrap;
+        }
+        .tag-item {
+            display: flex;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            white-space: nowrap;
+        }
+        .quantity {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background-color: #69fff1;
+            color: #000;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            font-family: Inter, sans-serif;
+        }
+        .item {
+            color: #fff;
+            font-size: 14px;
+            font-family: Inter, sans-serif;
+        }
+        .add-button {
+            border-radius: 50px;
+            background-color: rgba(255, 255, 255, 0.16);
+            margin-top: 8px;
+            color: #fff;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 14px;
+            font-family: Inter, sans-serif;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .continue-button {
+            border-radius: 50px;
+            background-color: #69fff1;
+            margin: 24px 16px;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: Inter, sans-serif;
+            cursor: pointer;
+        }
+        .drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: #fff;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            padding: 16px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        .drawer.open {
+            transform: translateY(0);
+        }
+        @media (max-width: 480px) {
+            .content {
+                flex-direction: row;
+                align-items: center;
+            }
+            .tags-group {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .tag-item {
+                justify-content: space-between;
+                width: auto;
+            }
+            .add-button {
+                width: auto;
+            }
+            .continue-button {
+                width: calc(100% - 32px);
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Initial Setup</h1>
-        <form method="post">
-            <label for="family_size">Number of people in the family:</label>
-            <input type="number" id="family_size" name="family_size" required>
-
-            <label for="allergies">Allergies in the family:</label>
-            <input type="text" id="allergies" name="allergies">
-
-            <label>Must have items:</label>
-            <input type="checkbox" name="must_have" value="milk"> Milk
-            <input type="checkbox" name="must_have" value="eggs"> Eggs
-            <input type="checkbox" name="must_have" value="bread"> Bread
-            <input type="text" name="must_have_other" placeholder="Other must have items">
-
-            <label>Nice to have items:</label>
-            <input type="checkbox" name="nice_to_have" value="cheese"> Cheese
-            <input type="checkbox" name="nice_to_have" value="butter"> Butter
-            <input type="checkbox" name="nice_to_have" value="juice"> Juice
-            <input type="text" name="nice_to_have_other" placeholder="Other nice to have items">
-
-            <label for="budget">Budget:</label>
-            <input type="number" id="budget" name="budget" required>
-
-            <label for="frequency">Shopping frequency:</label>
-            <input type="text" id="frequency" name="frequency" required>
-
-            <button type="submit">Save and Continue</button>
-        </form>
+<div class="container">
+    <div class="section">
+        <div class="header">Let’s Begin</div>
+        <div class="subheader">Lorem ipsum dolor sit amet</div>
     </div>
+    <div class="section">
+        <div class="title">How many people?</div>
+        <div class="content">
+            <div class="icon-container" onclick="changeValue('people', -1)">
+                <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/c99eef0ef3cc3c7e585504efb7997023c9e2ebcca9e85ec78048c62300eb966c?apiKey=7f9605fb6c18457cae2fc48ce00acce6&"
+                        class="icon"
+                />
+            </div>
+            <div class="number" id="people-value">1</div>
+            <div class="icon-container" onclick="changeValue('people', 1)">
+                <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/ebe88577789ea5f09884a02766a68ef6ead1f4d595cf7afc66b2ec44547dc4eb?apiKey=7f9605fb6c18457cae2fc48ce00acce6&"
+                        class="icon"
+                />
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="title">What’s your budget?</div>
+        <div class="content">
+            <div class="icon-container" onclick="changeValue('budget', -1)">
+                <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/c99eef0ef3cc3c7e585504efb7997023c9e2ebcca9e85ec78048c62300eb966c?apiKey=7f9605fb6c18457cae2fc48ce00acce6&"
+                        class="icon"
+                />
+            </div>
+            <div class="number" id="budget-value">1</div>
+            <div class="icon-container" onclick="changeValue('budget', 1)">
+                <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/ebe88577789ea5f09884a02766a68ef6ead1f4d595cf7afc66b2ec44547dc4eb?apiKey=7f9605fb6c18457cae2fc48ce00acce6&"
+                        class="icon"
+                />
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="title-container">
+            <div class="title">Any known allergies?</div>
+            <div class="manage-button" onclick="openDrawer('allergies-drawer')">Manage</div>
+        </div>
+        <div class="tags" id="allergies-tags">
+            <div class="tag">Peanuts</div>
+            <div class="tag">Wheat</div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="title-container">
+            <div class="title">Must have groceries</div>
+            <div class="manage-button" onclick="openDrawer('must-have-drawer')">Manage</div>
+        </div>
+        <div class="tags-group" id="must-have-tags">
+            <div class="tag-item">
+                <div class="quantity">3</div>
+                <div class="item">Bread</div>
+            </div>
+            <div class="tag-item">
+                <div class="quantity">2</div>
+                <div class="item">Milk</div>
+            </div>
+            <!-- Add more tag items as needed -->
+        </div>
+        <div class="add-button" onclick="addGrocery('must-have')">+10</div>
+    </div>
+    <div class="section">
+        <div class="title-container">
+            <div class="title">Nice to have groceries</div>
+            <div class="manage-button" onclick="openDrawer('nice-to-have-drawer')">Manage</div>
+        </div>
+        <div class="tags-group" id="nice-to-have-tags">
+            <div class="tag-item">
+                <div class="quantity">1</div>
+                <div class="item">Nutella</div>
+            </div>
+            <div class="tag-item">
+                <div class="quantity">1</div>
+                <div class="item">Ice Cream</div>
+            </div>
+            <!-- Add more tag items as needed -->
+        </div>
+    </div>
+    <div class="continue-button" onclick="submitForm()">Continue</div>
+</div>
+
+<div id="allergies-drawer" class="drawer">
+    <!-- Allergies management content here -->
+    <p>Manage allergies here...</p>
+</div>
+<div id="must-have-drawer" class="drawer">
+    <!-- Must have groceries management content here -->
+    <p>Manage must have groceries here...</p>
+</div>
+<div id="nice-to-have-drawer" class="drawer">
+    <!-- Nice to have groceries management content here -->
+    <p>Manage nice to have groceries here...</p>
+</div>
+
+<script>
+    function changeValue(type, delta) {
+        const valueElement = document.getElementById(`${type}-value`);
+        let currentValue = parseInt(valueElement.textContent.replace('$', ''));
+        currentValue = Math.max(1, currentValue + delta);
+        valueElement.textContent = type === 'budget' ? `${currentValue}$` : currentValue;
+    }
+
+    function openDrawer(drawerId) {
+        const drawer = document.getElementById(drawerId);
+        drawer.classList.add('open');
+        drawer.onclick = function() {
+            drawer.classList.remove('open');
+        };
+    }
+
+    function addGrocery(type) {
+        // Add grocery item logic
+        console.log(`Add grocery item to ${type}`);
+    }
+
+    function submitForm() {
+        const people = document.getElementById('people-value').textContent;
+        const budget = document.getElementById('budget-value').textContent.replace('$', '');
+
+        // Get other form data as needed
+        const allergies = Array.from(document.querySelectorAll('#allergies-tags .tag')).map(tag => tag.textContent);
+        const mustHave = Array.from(document.querySelectorAll('#must-have-tags .tag-item')).map(tagItem => ({
+            item: tagItem.querySelector('.item').textContent,
+            quantity: tagItem.querySelector('.quantity').textContent,
+        }));
+        const niceToHave = Array.from(document.querySelectorAll('#nice-to-have-tags .tag-item')).map(tagItem => ({
+            item: tagItem.querySelector('.item').textContent,
+            quantity: tagItem.querySelector('.quantity').textContent,
+        }));
+
+        // Prepare data for submission
+        const formData = new FormData();
+        formData.append('family_size', people);
+        formData.append('budget', budget);
+        formData.append('allergies', allergies.join(','));
+        formData.append('must_have', mustHave.map(item => item.item).join(','));
+        formData.append('must_have_other', '');
+        formData.append('nice_to_have', niceToHave.map(item => item.item).join(','));
+        formData.append('nice_to_have_other', '');
+
+        // Submit form using fetch
+        fetch('{{ url_for('setup') }}', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                console.error('Form submission failed');
+            }
+        }).catch(error => console.error('Error:', error));
+    }
+</script>
 </body>
 </html>
