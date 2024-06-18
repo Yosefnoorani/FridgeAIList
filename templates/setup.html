@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Initial Setup</h1>
+        <form method="post">
+            <label for="family_size">Number of people in the family:</label>
+            <input type="number" id="family_size" name="family_size" required>
+
+            <label for="allergies">Allergies in the family:</label>
+            <input type="text" id="allergies" name="allergies">
+
+            <label>Must have items:</label>
+            <input type="checkbox" name="must_have" value="milk"> Milk
+            <input type="checkbox" name="must_have" value="eggs"> Eggs
+            <input type="checkbox" name="must_have" value="bread"> Bread
+            <input type="text" name="must_have_other" placeholder="Other must have items">
+
+            <label>Nice to have items:</label>
+            <input type="checkbox" name="nice_to_have" value="cheese"> Cheese
+            <input type="checkbox" name="nice_to_have" value="butter"> Butter
+            <input type="checkbox" name="nice_to_have" value="juice"> Juice
+            <input type="text" name="nice_to_have_other" placeholder="Other nice to have items">
+
+            <label for="budget">Budget:</label>
+            <input type="number" id="budget" name="budget" required>
+
+            <label for="frequency">Shopping frequency:</label>
+            <input type="text" id="frequency" name="frequency" required>
+
+            <button type="submit">Save and Continue</button>
+        </form>
+    </div>
+</body>
+</html>

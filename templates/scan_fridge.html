@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Your Fridge</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            text-align: center;
+            color: white;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .overlay {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+        .overlay-text {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .capture-button {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            border: none;
+            color: transparent;
+            padding: 25px;
+            font-size: 16px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .upload-button {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background-color: blue;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+        .thumbnail-container {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            text-align: center;
+        }
+        .counter {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+        .thumbnail {
+            width: 50px;
+            height: 50px;
+            border: 2px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .gallery-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .gallery-content {
+            position: relative;
+            margin: auto;
+            top: 50px;
+            width: 90%;
+            max-width: 700px;
+        }
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .delete-button {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .gallery-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .prev-button, .next-button {
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            cursor: pointer;
+        }
+        .next-button {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .prev-button:hover, .next-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .image-label {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <video id="video" autoplay></video>
+        <div class="overlay">
+            <div class="overlay-text">
+                Please capture at least 4 to 7 images of your fridge.
+            </div>
+        </div>
+        <div class="thumbnail-container">
+            <div class="counter" id="counter">0</div>
+            <img id="thumbnail" class="thumbnail" style="display: none;" onclick="openGallery()">
+        </div>
+        <button class="capture-button" id="capture"></button>
+        <button class="upload-button" id="upload" disabled>Continue</button>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <div id="galleryModal" class="gallery-modal">
+            <div class="gallery-content">
+                <span class="close-button" onclick="closeGallery()">&times;</span>
+                <span class="prev-button" onclick="changeImage(-1)">&#10094;</span>
+                <img id="galleryImage" class="gallery-image">
+                <span class="next-button" onclick="changeImage(1)">&#10095;</span>
+                <span id="imageLabel" class="image-label"></span>
+                <button class="delete-button" onclick="deleteImage()">Delete</button>
+            </div>
+        </div>
+        <form id="uploadForm" action="{{ url_for('upload_file') }}" method="post" style="display: none;">
+            <input type="hidden" name="images" id="imageData">
+            <input type="hidden" name="must_have" value="{{ must_have | join(',') }}">
+            <input type="hidden" name="must_have_other" value="{{ must_have_other }}">
+            <input type="hidden" name="nice_to_have" value="{{ nice_to_have | join(',') }}">
+            <input type="hidden" name="nice_to_have_other" value="{{ nice_to_have_other }}">
+        </form>
+    </div>
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const uploadButton = document.getElementById('upload');
+        const counter = document.getElementById('counter');
+        const imageDataInput = document.getElementById('imageData');
+        const uploadForm = document.getElementById('uploadForm');
+        const thumbnail = document.getElementById('thumbnail');
+        const galleryModal = document.getElementById('galleryModal');
+        const galleryImage = document.getElementById('galleryImage');
+        const imageLabel = document.getElementById('imageLabel');
+        let images = [];
+        let currentImageIndex = -1;
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+            })
+            .catch((err) => {
+                console.error('Error accessing camera: ', err);
+            });
+
+        captureButton.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/png');
+            images.push(imageData);
+            counter.textContent = images.length;
+            if (images.length >= 4) {
+                uploadButton.disabled = false;
+            }
+            if (images.length >= 7) {
+                captureButton.disabled = true;
+            }
+            imageDataInput.value = JSON.stringify(images);
+            updateThumbnail();
+            showCaptureFeedback();
+        });
+
+        uploadButton.addEventListener('click', () => {
+            uploadForm.submit();
+        });
+
+        function updateThumbnail() {
+            if (images.length > 0) {
+                thumbnail.src = images[images.length - 1];
+                thumbnail.style.display = 'block';
+                updateImageLabel();
+            }
+        }
+
+        function showCaptureFeedback() {
+            captureButton.style.backgroundColor = 'green';
+            setTimeout(() => {
+                captureButton.style.backgroundColor = 'white';
+            }, 200);
+        }
+
+        function openGallery() {
+            galleryModal.style.display = 'block';
+            currentImageIndex = images.length - 1;
+            galleryImage.src = images[currentImageIndex];
+            updateImageLabel();
+        }
+
+        function closeGallery() {
+            galleryModal.style.display = 'none';
+        }
+
+        function deleteImage() {
+            if (currentImageIndex > -1) {
+                images.splice(currentImageIndex, 1);
+                if (images.length === 0) {
+                    thumbnail.style.display = 'none';
+                    closeGallery();
+                } else {
+                    currentImageIndex = Math.min(currentImageIndex, images.length - 1);
+                    galleryImage.src = images[currentImageIndex];
+                    updateImageLabel();
+                }
+                counter.textContent = images.length;
+                if (images.length < 4) {
+                    uploadButton.disabled = true;
+                }
+                captureButton.disabled = false;
+                imageDataInput.value = JSON.stringify(images);
+            }
+        }
+
+        function changeImage(direction) {
+            if (images.length > 0) {
+                currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+                galleryImage.src = images[currentImageIndex];
+                updateImageLabel();
+            }
+        }
+
+        function updateImageLabel() {
+            if (images.length > 0) {
+                imageLabel.textContent = `${currentImageIndex + 1} / ${images.length}`;
+            }
+        }
+    </script>
+</body>
+</html>
