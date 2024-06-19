@@ -26,25 +26,53 @@ def get_missing_items(items, must_have, must_have_other, nice_to_have, nice_to_h
 def index():
     return render_template('home.html')
 
+
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
     if request.method == 'POST':
-        must_have = request.form.getlist('must_have')
-        must_have_other = request.form.get('must_have_other')
-        nice_to_have = request.form.getlist('nice_to_have')
-        nice_to_have_other = request.form.get('nice_to_have_other')
-        return redirect(url_for('scan_fridge', must_have=','.join(must_have), must_have_other=must_have_other,
-                                nice_to_have=','.join(nice_to_have), nice_to_have_other=nice_to_have_other))
+        must_have_items = request.form.getlist('must_have_items[]')
+        must_have_quantities = request.form.getlist('must_have_quantities[]')
+        nice_to_have_items = request.form.getlist('nice_to_have_items[]')
+        nice_to_have_quantities = request.form.getlist('nice_to_have_quantities[]')
+
+        # Combine items and quantities into tuples
+        must_have = list(zip(must_have_items, must_have_quantities))
+        nice_to_have = list(zip(nice_to_have_items, nice_to_have_quantities))
+
+        must_have_other = request.form.get('must_have_other', '')
+        nice_to_have_other = request.form.get('nice_to_have_other', '')
+
+        # Redirect with combined data as query parameters
+        return redirect(url_for('scan_fridge',
+                                must_have=json.dumps(must_have),
+                                must_have_other=must_have_other,
+                                nice_to_have=json.dumps(nice_to_have),
+                                nice_to_have_other=nice_to_have_other))
     return render_template('setup.html')
+
 
 @app.route('/scan_fridge')
 def scan_fridge():
-    must_have = request.args.get('must_have', '').split(',')
+    must_have = json.loads(request.args.get('must_have', '[]'))
+    # print(must_have)
     must_have_other = request.args.get('must_have_other', '')
-    nice_to_have = request.args.get('nice_to_have', '').split(',')
+    # print(must_have_other)
+    nice_to_have = json.loads(request.args.get('nice_to_have', '[]'))
     nice_to_have_other = request.args.get('nice_to_have_other', '')
-    return render_template('scan_fridge.html', must_have=must_have, must_have_other=must_have_other,
-                           nice_to_have=nice_to_have, nice_to_have_other=nice_to_have_other)
+    return render_template('scan_fridge.html',
+                           must_have=must_have,
+                           must_have_other=must_have_other,
+                           nice_to_have=nice_to_have,
+                           nice_to_have_other=nice_to_have_other)
+
+# @app.route('/scan_fridge')
+# def scan_fridge():
+#     must_have = request.args.get('must_have', '').split(',')
+#     must_have_other = request.args.get('must_have_other', '')
+#     nice_to_have = request.args.get('nice_to_have', '').split(',')
+#     nice_to_have_other = request.args.get('nice_to_have_other', '')
+#     return render_template('scan_fridge.html', must_have=must_have, must_have_other=must_have_other,
+#                            nice_to_have=nice_to_have, nice_to_have_other=nice_to_have_other)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():

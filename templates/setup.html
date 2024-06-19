@@ -55,7 +55,6 @@
         .icon-container {
             display: flex;
             justify-content: center;
-            /*align-items: center;*/
             border-radius: 50%;
             backdrop-filter: blur(10px);
             background-color: #fff;
@@ -94,7 +93,7 @@
             display: flex;
             margin-top: 16px;
             gap: 8px;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             overflow-x: auto;
             font-size: 14px;
             color: #fff;
@@ -261,6 +260,7 @@
             text-align: right;
             margin: auto 0;
             font-family: "Inter", sans-serif;
+            cursor: pointer;
         }
         .allergy-action.remove {
             color: #E71D36;
@@ -288,7 +288,6 @@
 
         /* New Styles for Grocery Drawers */
         .grocery-container {
-            /*position: fixed;*/
             bottom: 0;
             width: 100%;
             border-radius: 24px 24px 0 0;
@@ -300,8 +299,6 @@
         .grocery-header {
             justify-content: space-between;
             display: flex;
-            /*width: 100%;*/
-            /*gap: 10px;*/
             padding: 8px 16px;
         }
         .grocery-title {
@@ -327,8 +324,6 @@
         .grocery-item {
             justify-content: space-between;
             display: flex;
-            /*width: 100%;*/
-            /*gap: 10px;*/
             padding: 0 16px;
         }
         .grocery-item-name {
@@ -344,7 +339,6 @@
         }
         .control-icon-wrapper {
             justify-content: center;
-            /*align-items: center;*/
             border-radius: 999px;
             backdrop-filter: blur(10px);
             display: flex;
@@ -440,10 +434,6 @@
         <div class="tags" id="allergies-tags">
             <div class="tag">Peanuts</div>
             <div class="tag">Wheat</div>
-            <div class="tag">Peanuts</div>
-            <div class="tag">Wheat</div>
-            <div class="tag">Peanuts</div>
-            <div class="tag">Wheat</div>
         </div>
     </div>
     <div class="section">
@@ -488,36 +478,36 @@
             <form class="allergy-card">
                 <header class="allergy-card-header">
                     <h2 class="allergy-header-title">Any known allergies?</h2>
-                    <div class="allergy-header-icon">
+                    <div class="allergy-header-icon" onclick="closeDrawer('allergies-drawer')">
                         <img src="static/x.svg" alt="" />
                     </div>
                 </header>
                 <div class="allergy-item">
                     <label for="allergy-milk" class="allergy-name">Milk</label>
-                    <button id="allergy-milk" class="allergy-action">Add</button>
+                    <button id="allergy-milk" class="allergy-action" type="button" onclick="toggleAllergy('Milk', this)">Add</button>
                 </div>
                 <div class="allergy-item">
                     <label for="allergy-soy" class="allergy-name">Soy</label>
-                    <button id="allergy-soy" class="allergy-action">Add</button>
+                    <button id="allergy-soy" class="allergy-action" type="button" onclick="toggleAllergy('Soy', this)">Add</button>
                 </div>
                 <div class="allergy-item">
                     <label for="allergy-wheat" class="allergy-name">Wheat</label>
-                    <button id="allergy-wheat" class="allergy-action remove">Remove</button>
+                    <button id="allergy-wheat" class="allergy-action remove" type="button" onclick="toggleAllergy('Wheat', this)">Remove</button>
                 </div>
                 <div class="allergy-item">
                     <label for="allergy-eggs" class="allergy-name">Eggs</label>
-                    <button id="allergy-eggs" class="allergy-action">Add</button>
+                    <button id="allergy-eggs" class="allergy-action" type="button" onclick="toggleAllergy('Eggs', this)">Add</button>
                 </div>
                 <div class="allergy-item">
                     <label for="allergy-peanuts" class="allergy-name">Peanuts</label>
-                    <button id="allergy-peanuts" class="allergy-action remove">Remove</button>
+                    <button id="allergy-peanuts" class="allergy-action remove" type="button" onclick="toggleAllergy('Peanuts', this)">Remove</button>
                 </div>
                 <div class="allergy-item">
                     <label for="allergy-fish" class="allergy-name">Fish</label>
-                    <button id="allergy-fish" class="allergy-action">Add</button>
+                    <button id="allergy-fish" class="allergy-action" type="button" onclick="toggleAllergy('Fish', this)">Add</button>
                 </div>
                 <div class="allergy-submit-section">
-                    <button class="allergy-submit-button">Save</button>
+                    <button class="allergy-submit-button" type="button" onclick="saveAllergies()">Save</button>
                 </div>
             </form>
         </div>
@@ -528,18 +518,18 @@
     <section class="grocery-container">
         <header class="grocery-header">
             <h1 class="grocery-title">Must have groceries</h1>
-            <div class="grocery-icon-wrapper">
+            <div class="grocery-icon-wrapper" onclick="closeDrawer('must-have-drawer')">
                 <img loading="lazy" src="static/x.svg" class="grocery-icon" alt="">
             </div>
         </header>
         <div class="grocery-item">
             <p class="grocery-item-name">Bread</p>
             <div class="grocery-item-controls">
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Bread', -1)">
                     <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
                 </div>
-                <span class="item-quantity">1</span>
-                <div class="control-icon-wrapper">
+                <span class="item-quantity">3</span>
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Bread', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
             </div>
@@ -547,11 +537,11 @@
         <div class="grocery-item">
             <p class="grocery-item-name">Milk</p>
             <div class="grocery-item-controls">
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Milk', -1)">
                     <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
                 </div>
                 <span class="item-quantity">2</span>
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Milk', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
             </div>
@@ -559,11 +549,11 @@
         <div class="grocery-item">
             <p class="grocery-item-name">Chicken Breast</p>
             <div class="grocery-item-controls">
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Chicken Breast', -1)">
                     <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
                 </div>
                 <span class="item-quantity">1kg</span>
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Chicken Breast', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
             </div>
@@ -571,11 +561,11 @@
         <div class="grocery-item">
             <p class="grocery-item-name">Tea</p>
             <div class="grocery-item-controls">
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Tea', -1)">
                     <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
                 </div>
                 <span class="item-quantity">0</span>
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Tea', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
             </div>
@@ -583,11 +573,11 @@
         <div class="grocery-item">
             <p class="grocery-item-name">Coffee Capsules</p>
             <div class="grocery-item-controls">
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Coffee Capsules', -1)">
                     <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
                 </div>
                 <span class="item-quantity">1</span>
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Coffee Capsules', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
             </div>
@@ -595,17 +585,17 @@
         <div class="grocery-item">
             <p class="grocery-item-name">Tomatoes</p>
             <div class="grocery-item-controls">
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Tomatoes', -1)">
                     <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
                 </div>
                 <span class="item-quantity">0</span>
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Tomatoes', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
             </div>
         </div>
         <footer class="grocery-footer">
-            <button class="save-button">Save</button>
+            <button class="save-button" type="button" onclick="saveGroceries('must-have')">Save</button>
         </footer>
     </section>
 </div>
@@ -614,18 +604,18 @@
     <section class="grocery-container">
         <header class="grocery-header">
             <h1 class="grocery-title">Nice to have groceries</h1>
-            <div class="grocery-icon-wrapper">
-                <img loading="lazy" src="hstatic/x.svg" class="grocery-icon" alt="">
+            <div class="grocery-icon-wrapper" onclick="closeDrawer('nice-to-have-drawer')">
+                <img loading="lazy" src="static/x.svg" class="grocery-icon" alt="">
             </div>
         </header>
         <div class="grocery-item">
             <p class="grocery-item-name">Nutella</p>
             <div class="grocery-item-controls">
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Nutella', -1)">
                     <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
                 </div>
                 <span class="item-quantity">1</span>
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Nutella', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
             </div>
@@ -633,17 +623,17 @@
         <div class="grocery-item">
             <p class="grocery-item-name">Ice Cream</p>
             <div class="grocery-item-controls">
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Ice Cream', -1)">
                     <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
                 </div>
                 <span class="item-quantity">1</span>
-                <div class="control-icon-wrapper">
+                <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Ice Cream', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
             </div>
         </div>
         <footer class="grocery-footer">
-            <button class="save-button">Save</button>
+            <button class="save-button" type="button" onclick="saveGroceries('nice-to-have')">Save</button>
         </footer>
     </section>
 </div>
@@ -659,21 +649,70 @@
     function openDrawer(drawerId) {
         const drawer = document.getElementById(drawerId);
         drawer.classList.add('open');
-        drawer.onclick = function() {
-            drawer.classList.remove('open');
-        };
     }
 
-    function addGrocery(type) {
-        // Add grocery item logic
-        console.log(`Add grocery item to ${type}`);
+    function closeDrawer(drawerId) {
+        const drawer = document.getElementById(drawerId);
+        drawer.classList.remove('open');
+    }
+
+    function toggleAllergy(allergy, button) {
+        const isRemoving = button.textContent === 'Remove';
+        button.textContent = isRemoving ? 'Add' : 'Remove';
+        button.classList.toggle('remove', !isRemoving);
+    }
+
+    function saveAllergies() {
+        const tagsContainer = document.getElementById('allergies-tags');
+        tagsContainer.innerHTML = '';
+        const buttons = document.querySelectorAll('.allergy-action');
+        buttons.forEach(button => {
+            if (button.textContent === 'Remove') {
+                const allergy = button.previousElementSibling.textContent;
+                const tag = document.createElement('div');
+                tag.className = 'tag';
+                tag.textContent = allergy;
+                tagsContainer.appendChild(tag);
+            }
+        });
+        closeDrawer('allergies-drawer');
+    }
+
+    function changeGroceryQuantity(item, delta) {
+        const groceryItems = document.querySelectorAll('.grocery-item');
+        groceryItems.forEach(groceryItem => {
+            const itemName = groceryItem.querySelector('.grocery-item-name').textContent;
+            if (itemName === item) {
+                const quantityElement = groceryItem.querySelector('.item-quantity');
+                let currentQuantity = parseInt(quantityElement.textContent.replace('kg', '')) || 0;
+                currentQuantity = Math.max(0, currentQuantity + delta);
+                quantityElement.textContent = currentQuantity + (item === 'Chicken Breast' ? 'kg' : '');
+            }
+        });
+    }
+
+    function saveGroceries(type) {
+        const tagsContainer = document.getElementById(`${type}-tags`);
+        tagsContainer.innerHTML = '';
+        const drawer = document.getElementById(`${type}-drawer`);
+        const groceryItems = drawer.querySelectorAll('.grocery-item');
+        groceryItems.forEach(groceryItem => {
+            const itemName = groceryItem.querySelector('.grocery-item-name').textContent;
+            const quantity = groceryItem.querySelector('.item-quantity').textContent;
+            if (parseInt(quantity) > 0) {
+                const tagItem = document.createElement('div');
+                tagItem.className = 'tag-item';
+                tagItem.innerHTML = `<div class="quantity">${quantity}</div><div class="item">${itemName}</div>`;
+                tagsContainer.appendChild(tagItem);
+            }
+        });
+        closeDrawer(`${type}-drawer`);
     }
 
     function submitForm() {
         const people = document.getElementById('people-value').textContent;
         const budget = document.getElementById('budget-value').textContent.replace('$', '');
 
-        // Get other form data as needed
         const allergies = Array.from(document.querySelectorAll('#allergies-tags .tag')).map(tag => tag.textContent);
         const mustHave = Array.from(document.querySelectorAll('#must-have-tags .tag-item')).map(tagItem => ({
             item: tagItem.querySelector('.item').textContent,
@@ -684,17 +723,21 @@
             quantity: tagItem.querySelector('.quantity').textContent,
         }));
 
-        // Prepare data for submission
         const formData = new FormData();
         formData.append('family_size', people);
         formData.append('budget', budget);
         formData.append('allergies', allergies.join(','));
-        formData.append('must_have', mustHave.map(item => item.item).join(','));
-        formData.append('must_have_other', '');
-        formData.append('nice_to_have', niceToHave.map(item => item.item).join(','));
-        formData.append('nice_to_have_other', '');
 
-        // Submit form using fetch
+        mustHave.forEach(item => {
+            formData.append('must_have_items[]', item.item);
+            formData.append('must_have_quantities[]', item.quantity);
+        });
+
+        niceToHave.forEach(item => {
+            formData.append('nice_to_have_items[]', item.item);
+            formData.append('nice_to_have_quantities[]', item.quantity);
+        });
+
         fetch('{{ url_for('setup') }}', {
             method: 'POST',
             body: formData
