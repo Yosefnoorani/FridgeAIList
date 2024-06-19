@@ -19,7 +19,6 @@
             width: 100%;
             flex-direction: column;
             margin: 0 auto;
-            /*padding: 24px 0;*/
             box-sizing: border-box;
             height: 100vh;
             overflow-y: auto;
@@ -56,7 +55,7 @@
         .icon-container {
             display: flex;
             justify-content: center;
-            align-items: center;
+            /*align-items: center;*/
             border-radius: 50%;
             backdrop-filter: blur(10px);
             background-color: #fff;
@@ -208,7 +207,6 @@
             flex-direction: column;
             justify-content: center;
             width: 100%;
-            /*padding-top: 80px;*/
         }
         .allergy-card {
             display: flex;
@@ -217,13 +215,11 @@
             width: 100%;
             border-radius: 24px 24px 0 0;
             background-color: #ffffff;
-            /*margin-top: 283px;*/
             padding: 1px 0 16px;
         }
         .allergy-card-header {
             display: flex;
             justify-content: space-between;
-            /*width: 100%;*/
             gap: 10px;
             padding: 8px 16px;
         }
@@ -250,7 +246,6 @@
         .allergy-item {
             display: flex;
             justify-content: space-between;
-            /*width: 100%;*/
             padding: 17px 16px;
             gap: 10px;
         }
@@ -290,6 +285,105 @@
             white-space: nowrap;
             cursor: pointer;
         }
+
+        /* New Styles for Grocery Drawers */
+        .grocery-container {
+            /*position: fixed;*/
+            bottom: 0;
+            width: 100%;
+            border-radius: 24px 24px 0 0;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 1px 0 16px;
+        }
+        .grocery-header {
+            justify-content: space-between;
+            display: flex;
+            /*width: 100%;*/
+            /*gap: 10px;*/
+            padding: 8px 16px;
+        }
+        .grocery-title {
+            color: #000;
+            margin: auto 0;
+            font: 600 18px Inter, sans-serif;
+        }
+        .grocery-icon-wrapper {
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            padding: 4px;
+        }
+        .grocery-icon {
+            aspect-ratio: 1;
+            object-fit: auto;
+            object-position: center;
+            width: 12px;
+            fill: #000;
+        }
+        .grocery-item {
+            justify-content: space-between;
+            display: flex;
+            /*width: 100%;*/
+            /*gap: 10px;*/
+            padding: 0 16px;
+        }
+        .grocery-item-name {
+            color: #000;
+            margin: auto 0;
+            font: 400 18px Inter, sans-serif;
+        }
+        .grocery-item-controls {
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        .control-icon-wrapper {
+            justify-content: center;
+            /*align-items: center;*/
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            padding: 4px;
+        }
+        .control-icon {
+            aspect-ratio: 7.14;
+            object-fit: auto;
+            object-position: center;
+            width: 14px;
+            fill: #000;
+        }
+        .item-quantity {
+            color: #000;
+            text-align: center;
+            margin: auto 0;
+            font: 500 16px Inter, sans-serif;
+        }
+        .grocery-footer {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            font-size: 18px;
+            color: #fff;
+            font-weight: 400;
+            white-space: nowrap;
+            text-align: center;
+            padding: 16px 16px 0;
+        }
+        .save-button {
+            font-family: Inter, sans-serif;
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            background-color: #000;
+            padding: 17px 16px;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -304,7 +398,7 @@
             <div class="icon-container" onclick="changeValue('people', -1)">
                 <img
                         loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/c99eef0ef3cc3c7e585504efb7997023c9e2ebcca9e85ec78048c62300eb966c?apiKey=7f9605fb6c18457cae2fc48ce00acce6&"
+                        src="static/minus.svg"
                         class="icon"
                 />
             </div>
@@ -312,7 +406,7 @@
             <div class="icon-container" onclick="changeValue('people', 1)">
                 <img
                         loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/ebe88577789ea5f09884a02766a68ef6ead1f4d595cf7afc66b2ec44547dc4eb?apiKey=7f9605fb6c18457cae2fc48ce00acce6&"
+                        src="static/plus.svg"
                         class="icon"
                 />
             </div>
@@ -324,7 +418,7 @@
             <div class="icon-container" onclick="changeValue('budget', -1)">
                 <img
                         loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/c99eef0ef3cc3c7e585504efb7997023c9e2ebcca9e85ec78048c62300eb966c?apiKey=7f9605fb6c18457cae2fc48ce00acce6&"
+                        src="static/minus.svg"
                         class="icon"
                 />
             </div>
@@ -332,7 +426,7 @@
             <div class="icon-container" onclick="changeValue('budget', 1)">
                 <img
                         loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/ebe88577789ea5f09884a02766a68ef6ead1f4d595cf7afc66b2ec44547dc4eb?apiKey=7f9605fb6c18457cae2fc48ce00acce6&"
+                        src="static/plus.svg"
                         class="icon"
                 />
             </div>
@@ -366,7 +460,6 @@
                 <div class="quantity">2</div>
                 <div class="item">Milk</div>
             </div>
-            <!-- Add more tag items as needed -->
         </div>
         <div class="add-button" onclick="addGrocery('must-have')">+10</div>
     </div>
@@ -384,13 +477,11 @@
                 <div class="quantity">1</div>
                 <div class="item">Ice Cream</div>
             </div>
-            <!-- Add more tag items as needed -->
         </div>
     </div>
     <div class="continue-button" onclick="submitForm()">Continue</div>
 </div>
 
-<!-- Existing drawers -->
 <div id="allergies-drawer" class="drawer">
     <section class="allergy-container">
         <div class="allergy-content">
@@ -398,7 +489,7 @@
                 <header class="allergy-card-header">
                     <h2 class="allergy-header-title">Any known allergies?</h2>
                     <div class="allergy-header-icon">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/78ae675daf10f68e94947a593f87fc8331c35dad76579c98a20cae9b118f50f2?apiKey=7f9605fb6c18457cae2fc48ce00acce6&" alt="" />
+                        <img src="static/x.svg" alt="" />
                     </div>
                 </header>
                 <div class="allergy-item">
@@ -432,12 +523,131 @@
         </div>
     </section>
 </div>
+
 <div id="must-have-drawer" class="drawer">
-    <p>Manage must have groceries here...</p>
+    <section class="grocery-container">
+        <header class="grocery-header">
+            <h1 class="grocery-title">Must have groceries</h1>
+            <div class="grocery-icon-wrapper">
+                <img loading="lazy" src="static/x.svg" class="grocery-icon" alt="">
+            </div>
+        </header>
+        <div class="grocery-item">
+            <p class="grocery-item-name">Bread</p>
+            <div class="grocery-item-controls">
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
+                </div>
+                <span class="item-quantity">1</span>
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
+                </div>
+            </div>
+        </div>
+        <div class="grocery-item">
+            <p class="grocery-item-name">Milk</p>
+            <div class="grocery-item-controls">
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
+                </div>
+                <span class="item-quantity">2</span>
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
+                </div>
+            </div>
+        </div>
+        <div class="grocery-item">
+            <p class="grocery-item-name">Chicken Breast</p>
+            <div class="grocery-item-controls">
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
+                </div>
+                <span class="item-quantity">1kg</span>
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
+                </div>
+            </div>
+        </div>
+        <div class="grocery-item">
+            <p class="grocery-item-name">Tea</p>
+            <div class="grocery-item-controls">
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
+                </div>
+                <span class="item-quantity">0</span>
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
+                </div>
+            </div>
+        </div>
+        <div class="grocery-item">
+            <p class="grocery-item-name">Coffee Capsules</p>
+            <div class="grocery-item-controls">
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
+                </div>
+                <span class="item-quantity">1</span>
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
+                </div>
+            </div>
+        </div>
+        <div class="grocery-item">
+            <p class="grocery-item-name">Tomatoes</p>
+            <div class="grocery-item-controls">
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
+                </div>
+                <span class="item-quantity">0</span>
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
+                </div>
+            </div>
+        </div>
+        <footer class="grocery-footer">
+            <button class="save-button">Save</button>
+        </footer>
+    </section>
 </div>
+
 <div id="nice-to-have-drawer" class="drawer">
-    <p>Manage nice to have groceries here...</p>
+    <section class="grocery-container">
+        <header class="grocery-header">
+            <h1 class="grocery-title">Nice to have groceries</h1>
+            <div class="grocery-icon-wrapper">
+                <img loading="lazy" src="hstatic/x.svg" class="grocery-icon" alt="">
+            </div>
+        </header>
+        <div class="grocery-item">
+            <p class="grocery-item-name">Nutella</p>
+            <div class="grocery-item-controls">
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
+                </div>
+                <span class="item-quantity">1</span>
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
+                </div>
+            </div>
+        </div>
+        <div class="grocery-item">
+            <p class="grocery-item-name">Ice Cream</p>
+            <div class="grocery-item-controls">
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
+                </div>
+                <span class="item-quantity">1</span>
+                <div class="control-icon-wrapper">
+                    <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
+                </div>
+            </div>
+        </div>
+        <footer class="grocery-footer">
+            <button class="save-button">Save</button>
+        </footer>
+    </section>
 </div>
+
 <script>
     function changeValue(type, delta) {
         const valueElement = document.getElementById(`${type}-value`);
