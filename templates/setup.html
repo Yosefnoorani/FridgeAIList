@@ -19,7 +19,7 @@
             width: 100%;
             flex-direction: column;
             margin: 0 auto;
-            padding: 24px 0;
+            /*padding: 24px 0;*/
             box-sizing: border-box;
             height: 100vh;
             overflow-y: auto;
@@ -193,6 +193,103 @@
                 width: calc(100% - 32px);
             }
         }
+
+        /* New Styles for Allergies Drawer */
+        .allergy-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 480px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .allergy-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            /*padding-top: 80px;*/
+        }
+        .allergy-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            border-radius: 24px 24px 0 0;
+            background-color: #ffffff;
+            /*margin-top: 283px;*/
+            padding: 1px 0 16px;
+        }
+        .allergy-card-header {
+            display: flex;
+            justify-content: space-between;
+            /*width: 100%;*/
+            gap: 10px;
+            padding: 8px 16px;
+        }
+        .allergy-header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000000;
+            margin: auto 0;
+            font-family: "Inter", sans-serif;
+        }
+        .allergy-header-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4px;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+        }
+        .allergy-header-icon img {
+            width: 12px;
+            aspect-ratio: 1;
+            object-fit: auto;
+        }
+        .allergy-item {
+            display: flex;
+            justify-content: space-between;
+            /*width: 100%;*/
+            padding: 17px 16px;
+            gap: 10px;
+        }
+        .allergy-name {
+            font-size: 18px;
+            font-weight: 400;
+            color: #000000;
+            font-family: "Inter", sans-serif;
+        }
+        .allergy-action {
+            font-size: 16px;
+            font-weight: 500;
+            text-align: right;
+            margin: auto 0;
+            font-family: "Inter", sans-serif;
+        }
+        .allergy-action.remove {
+            color: #E71D36;
+        }
+        .allergy-submit-section {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 16px 16px 0;
+        }
+        .allergy-submit-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 17px 90px;
+            border-radius: 999px;
+            background-color: #000000;
+            font-size: 18px;
+            font-weight: 400;
+            color: #FFFFFF;
+            font-family: "Inter", sans-serif;
+            white-space: nowrap;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -249,6 +346,10 @@
         <div class="tags" id="allergies-tags">
             <div class="tag">Peanuts</div>
             <div class="tag">Wheat</div>
+            <div class="tag">Peanuts</div>
+            <div class="tag">Wheat</div>
+            <div class="tag">Peanuts</div>
+            <div class="tag">Wheat</div>
         </div>
     </div>
     <div class="section">
@@ -289,19 +390,54 @@
     <div class="continue-button" onclick="submitForm()">Continue</div>
 </div>
 
+<!-- Existing drawers -->
 <div id="allergies-drawer" class="drawer">
-    <!-- Allergies management content here -->
-    <p>Manage allergies here...</p>
+    <section class="allergy-container">
+        <div class="allergy-content">
+            <form class="allergy-card">
+                <header class="allergy-card-header">
+                    <h2 class="allergy-header-title">Any known allergies?</h2>
+                    <div class="allergy-header-icon">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/78ae675daf10f68e94947a593f87fc8331c35dad76579c98a20cae9b118f50f2?apiKey=7f9605fb6c18457cae2fc48ce00acce6&" alt="" />
+                    </div>
+                </header>
+                <div class="allergy-item">
+                    <label for="allergy-milk" class="allergy-name">Milk</label>
+                    <button id="allergy-milk" class="allergy-action">Add</button>
+                </div>
+                <div class="allergy-item">
+                    <label for="allergy-soy" class="allergy-name">Soy</label>
+                    <button id="allergy-soy" class="allergy-action">Add</button>
+                </div>
+                <div class="allergy-item">
+                    <label for="allergy-wheat" class="allergy-name">Wheat</label>
+                    <button id="allergy-wheat" class="allergy-action remove">Remove</button>
+                </div>
+                <div class="allergy-item">
+                    <label for="allergy-eggs" class="allergy-name">Eggs</label>
+                    <button id="allergy-eggs" class="allergy-action">Add</button>
+                </div>
+                <div class="allergy-item">
+                    <label for="allergy-peanuts" class="allergy-name">Peanuts</label>
+                    <button id="allergy-peanuts" class="allergy-action remove">Remove</button>
+                </div>
+                <div class="allergy-item">
+                    <label for="allergy-fish" class="allergy-name">Fish</label>
+                    <button id="allergy-fish" class="allergy-action">Add</button>
+                </div>
+                <div class="allergy-submit-section">
+                    <button class="allergy-submit-button">Save</button>
+                </div>
+            </form>
+        </div>
+    </section>
 </div>
 <div id="must-have-drawer" class="drawer">
-    <!-- Must have groceries management content here -->
     <p>Manage must have groceries here...</p>
 </div>
 <div id="nice-to-have-drawer" class="drawer">
-    <!-- Nice to have groceries management content here -->
     <p>Manage nice to have groceries here...</p>
 </div>
-
 <script>
     function changeValue(type, delta) {
         const valueElement = document.getElementById(`${type}-value`);
