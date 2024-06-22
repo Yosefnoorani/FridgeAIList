@@ -98,9 +98,8 @@
         .gallery-content {
             position: relative;
             margin: auto;
-            top: 50px;
-            width: 90%;
-            max-width: 700px;
+            width: 100%;
+            height: 100%;
         }
         .close-button {
             position: absolute;
@@ -126,7 +125,8 @@
         }
         .gallery-image {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             border-radius: 5px;
         }
         .prev-button, .next-button {
@@ -161,6 +161,14 @@
             border-radius: 5px;
             font-size: 16px;
         }
+        .switch-camera-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -173,19 +181,22 @@
         </div>
         <div class="thumbnail-container">
             <div class="counter" id="counter">0</div>
-            <img id="thumbnail" class="thumbnail" style="display: none;" onclick="openGallery()">
+            <img id="thumbnail" class="thumbnail" style="display: none;" onclick="openGallery()" alt="Thumbnail">
         </div>
-        <button class="capture-button" id="capture"></button>
-        <button class="upload-button" id="upload" disabled>Continue</button>
+        <button class="capture-button" id="capture" aria-label="Capture Image"></button>
+        <button class="upload-button" id="upload" disabled aria-label="Upload Images">Continue</button>
+        <button class="switch-camera-button" id="switchCamera" aria-label="Switch Camera">
+        <img src="{{ url_for('static', filename='camera-switch-icon.png') }}" alt="Switch Camera" style="width: 30px; height: 30px;">
+        </button>
         <canvas id="canvas" style="display: none;"></canvas>
-        <div id="galleryModal" class="gallery-modal">
+        <div id="galleryModal" class="gallery-modal" role="dialog" aria-modal="true" aria-labelledby="galleryTitle">
             <div class="gallery-content">
-                <span class="close-button" onclick="closeGallery()">&times;</span>
-                <span class="prev-button" onclick="changeImage(-1)">&#10094;</span>
-                <img id="galleryImage" class="gallery-image">
-                <span class="next-button" onclick="changeImage(1)">&#10095;</span>
+                <span class="close-button" onclick="closeGallery()" aria-label="Close">&times;</span>
+                <span class="prev-button" onclick="changeImage(-1)" aria-label="Previous">&#10094;</span>
+                <img id="galleryImage" class="gallery-image" alt="Gallery Image">
+                <span class="next-button" onclick="changeImage(1)" aria-label="Next">&#10095;</span>
                 <span id="imageLabel" class="image-label"></span>
-                <button class="delete-button" onclick="deleteImage()">Delete</button>
+                <button class="delete-button" onclick="deleteImage()" aria-label="Delete Image">Delete</button>
             </div>
         </div>
         <form id="uploadForm" action="{{ url_for('upload_file') }}" method="post" style="display: none;">
@@ -208,16 +219,32 @@
         const galleryModal = document.getElementById('galleryModal');
         const galleryImage = document.getElementById('galleryImage');
         const imageLabel = document.getElementById('imageLabel');
+        const switchCameraButton = document.getElementById('switchCamera');
         let images = [];
         let currentImageIndex = -1;
+        let currentFacingMode = 'environment';
 
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then((stream) => {
-                video.srcObject = stream;
-            })
-            .catch((err) => {
-                console.error('Error accessing camera: ', err);
-            });
+        function startVideo(facingMode) {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
+                .then((stream) => {
+                    video.srcObject = stream;
+                })
+                .catch((err) => {
+                    console.error('Error accessing camera: ', err);
+                    if (facingMode === 'environment') {
+                        startVideo('user');
+                    } else {
+                        alert('Error accessing camera. Please check your camera settings.');
+                    }
+                });
+        }
+
+        startVideo(currentFacingMode);
+
+        switchCameraButton.addEventListener('click', () => {
+            currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
+            startVideo(currentFacingMode);
+        });
 
         captureButton.addEventListener('click', () => {
             const context = canvas.getContext('2d');
@@ -301,6 +328,8 @@
                 imageLabel.textContent = `${currentImageIndex + 1} / ${images.length}`;
             }
         }
+        // Ensure the switch camera button appears on the video
+        video.style.position = 'relative';
     </script>
 </body>
 </html>
