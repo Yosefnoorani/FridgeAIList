@@ -388,6 +388,14 @@
             color: white;
             font-size: 20px;
         }
+        .grocery-item-input {
+            flex-grow: 1;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -400,19 +408,11 @@
         <div class="title">How many people?</div>
         <div class="content">
             <div class="icon-container" onclick="changeValue('people', -1)">
-                <img
-                        loading="lazy"
-                        src="static/minus.svg"
-                        class="icon"
-                />
+                <img loading="lazy" src="static/minus.svg" class="icon" />
             </div>
             <div class="number" id="people-value">1</div>
             <div class="icon-container" onclick="changeValue('people', 1)">
-                <img
-                        loading="lazy"
-                        src="static/plus.svg"
-                        class="icon"
-                />
+                <img loading="lazy" src="static/plus.svg" class="icon" />
             </div>
         </div>
     </div>
@@ -420,19 +420,11 @@
         <div class="title">What’s your budget?</div>
         <div class="content">
             <div class="icon-container" onclick="changeValue('budget', -1)">
-                <img
-                        loading="lazy"
-                        src="static/minus.svg"
-                        class="icon"
-                />
+                <img loading="lazy" src="static/minus.svg" class="icon" />
             </div>
             <div class="number" id="budget-value">1$</div>
             <div class="icon-container" onclick="changeValue('budget', 1)">
-                <img
-                        loading="lazy"
-                        src="static/plus.svg"
-                        class="icon"
-                />
+                <img loading="lazy" src="static/plus.svg" class="icon" />
             </div>
         </div>
     </div>
@@ -604,6 +596,13 @@
                 </div>
             </div>
         </div>
+        <!-- Dynamic grocery items will be added here -->
+        <div class="grocery-item add-item">
+            <input type="text" id="must-have-input" class="grocery-item-input" placeholder="Add new item">
+            <div class="control-icon-wrapper" onclick="addGroceryItem('must-have')">
+                <img loading="lazy" src="static/plus.svg" class="control-icon" alt="Add item">
+            </div>
+        </div>
         <footer class="grocery-footer">
             <button class="save-button" type="button" onclick="saveGroceries('must-have')">Save</button>
         </footer>
@@ -640,6 +639,13 @@
                 <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Ice Cream', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
+            </div>
+        </div>
+        <!-- Dynamic grocery items will be added here -->
+        <div class="grocery-item add-item">
+            <input type="text" id="nice-to-have-input" class="grocery-item-input" placeholder="Add new item">
+            <div class="control-icon-wrapper" onclick="addGroceryItem('nice-to-have')">
+                <img loading="lazy" src="static/plus.svg" class="control-icon" alt="Add item">
             </div>
         </div>
         <footer class="grocery-footer">
@@ -691,14 +697,51 @@
     function changeGroceryQuantity(item, delta) {
         const groceryItems = document.querySelectorAll('.grocery-item');
         groceryItems.forEach(groceryItem => {
-            const itemName = groceryItem.querySelector('.grocery-item-name').textContent;
-            if (itemName === item) {
+            const itemNameElement = groceryItem.querySelector('.grocery-item-name');
+            if (itemNameElement && itemNameElement.textContent === item) {
                 const quantityElement = groceryItem.querySelector('.item-quantity');
-                let currentQuantity = parseInt(quantityElement.textContent.replace('kg', '')) || 0;
-                currentQuantity = Math.max(0, currentQuantity + delta);
-                quantityElement.textContent = currentQuantity + (item === 'Chicken Breast' ? 'kg' : '');
+                if (quantityElement) {
+                    let currentQuantity = parseInt(quantityElement.textContent.replace('kg', '')) || 0;
+                    currentQuantity = Math.max(0, currentQuantity + delta);
+                    quantityElement.textContent = currentQuantity + (item === 'Chicken Breast' ? 'kg' : '');
+                }
             }
         });
+    }
+
+    function addGroceryItem(type) {
+        const inputId = `${type}-input`;
+        const inputElement = document.getElementById(inputId);
+        const newItem = inputElement.value.trim();
+
+        if (newItem === "") {
+            return; // Do nothing if the input is empty
+        }
+
+        const drawer = document.getElementById(`${type}-drawer`);
+        const addItemElement = drawer.querySelector('.add-item');
+
+        if (addItemElement) {
+            const itemContainer = document.createElement('div');
+            itemContainer.className = 'grocery-item';
+            itemContainer.innerHTML = `
+                <p class="grocery-item-name">${newItem}</p>
+                <div class="grocery-item-controls">
+                    <div class="control-icon-wrapper" onclick="changeGroceryQuantity('${newItem}', -1)">
+                        <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
+                    </div>
+                    <span class="item-quantity">1</span>
+                    <div class="control-icon-wrapper" onclick="changeGroceryQuantity('${newItem}', 1)">
+                        <img loading="lazy" src="static/plus.svg" class="control-icon" alt="Increase quantity">
+                    </div>
+                </div>
+            `;
+
+            // Append the new item before the addItemElement
+            drawer.querySelector('section').insertBefore(itemContainer, addItemElement);
+        }
+
+        inputElement.value = ""; // Clear the input field
     }
 
     function saveGroceries(type) {
@@ -706,16 +749,24 @@
         tagsContainer.innerHTML = '';
         const drawer = document.getElementById(`${type}-drawer`);
         const groceryItems = drawer.querySelectorAll('.grocery-item');
+
         groceryItems.forEach(groceryItem => {
-            const itemName = groceryItem.querySelector('.grocery-item-name').textContent;
-            const quantity = groceryItem.querySelector('.item-quantity').textContent;
-            if (parseInt(quantity) > 0) {
-                const tagItem = document.createElement('div');
-                tagItem.className = 'tag-item';
-                tagItem.innerHTML = `<div class="quantity">${quantity}</div><div class="item">${itemName}</div>`;
-                tagsContainer.appendChild(tagItem);
+            const itemNameElement = groceryItem.querySelector('.grocery-item-name');
+            const quantityElement = groceryItem.querySelector('.item-quantity');
+
+            if (itemNameElement && quantityElement) {
+                const itemName = itemNameElement.textContent;
+                const quantity = quantityElement.textContent;
+
+                if (parseInt(quantity) > 0) {
+                    const tagItem = document.createElement('div');
+                    tagItem.className = 'tag-item';
+                    tagItem.innerHTML = `<div class="quantity">${quantity}</div><div class="item">${itemName}</div>`;
+                    tagsContainer.appendChild(tagItem);
+                }
             }
         });
+
         closeDrawer(`${type}-drawer`);
     }
 
