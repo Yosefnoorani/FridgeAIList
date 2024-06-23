@@ -131,19 +131,6 @@
             font-size: 14px;
             font-family: Inter, sans-serif;
         }
-        /*.add-button {
-            border-radius: 50px;
-            background-color: rgba(255, 255, 255, 0.16);
-            margin-top: 8px;
-            color: #fff;
-            text-align: center;
-            padding: 8px 0;
-            font-size: 14px;
-            font-family: Inter, sans-serif;
-            cursor: pointer;
-            white-space: nowrap;
-            width: 80px;
-        }*/
         .continue-button {
             border-radius: 50px;
             background-color: #69fff1;
@@ -185,9 +172,6 @@
                 justify-content: space-between;
                 width: auto;
             }
-            /*.add-button {
-                width: auto;
-            }*/
             .continue-button {
                 width: calc(100% - 32px);
             }
@@ -804,14 +788,44 @@
         const budget = document.getElementById('budget-value').textContent.replace('$', '');
 
         const allergies = Array.from(document.querySelectorAll('#allergies-tags .tag')).map(tag => tag.textContent);
-        const mustHave = Array.from(document.querySelectorAll('#must-have-tags .tag-item')).map(tagItem => ({
-            item: tagItem.querySelector('.item').textContent,
-            quantity: tagItem.querySelector('.quantity').textContent,
-        }));
-        const niceToHave = Array.from(document.querySelectorAll('#nice-to-have-tags .tag-item')).map(tagItem => ({
-            item: tagItem.querySelector('.item').textContent,
-            quantity: tagItem.querySelector('.quantity').textContent,
-        }));
+
+        const mustHaveDrawerItems = Array.from(document.querySelectorAll('#must-have-drawer .grocery-item'));
+        const mustHaveTagsItems = Array.from(document.querySelectorAll('#must-have-tags .tag-item'));
+
+        const mustHave = mustHaveDrawerItems.map(item => {
+            const itemName = item.querySelector('.grocery-item-name');
+            const itemQuantity = item.querySelector('.item-quantity');
+            if (itemName && itemQuantity) {
+                return {
+                    item: itemName.textContent,
+                    quantity: itemQuantity.textContent
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+
+
+        const niceToHaveDrawerItems = Array.from(document.querySelectorAll('#nice-to-have-drawer .grocery-item'));
+        const niceToHaveTagsItems = Array.from(document.querySelectorAll('#nice-to-have-tags .tag-item'));
+
+        const niceToHave = niceToHaveDrawerItems.map(item => {
+            const itemName = item.querySelector('.grocery-item-name');
+            const itemQuantity = item.querySelector('.item-quantity');
+            if (itemName && itemQuantity) {
+                return {
+                    item: itemName.textContent,
+                    quantity: itemQuantity.textContent
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+
+
+        console.log('People:', people);
+        console.log('Budget:', budget);
+        console.log('Allergies:', allergies);
+        console.log('Must Have:', mustHave);
+        console.log('Nice to Have:', niceToHave);
 
         const formData = new FormData();
         formData.append('family_size', people);

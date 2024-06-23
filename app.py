@@ -30,6 +30,10 @@ def index():
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
     if request.method == 'POST':
+        family_size = request.form.get('family_size')
+        budget = request.form.get('budget')
+        allergies = request.form.get('allergies').split(',')
+
         must_have_items = request.form.getlist('must_have_items[]')
         must_have_quantities = request.form.getlist('must_have_quantities[]')
         nice_to_have_items = request.form.getlist('nice_to_have_items[]')
@@ -39,40 +43,35 @@ def setup():
         must_have = list(zip(must_have_items, must_have_quantities))
         nice_to_have = list(zip(nice_to_have_items, nice_to_have_quantities))
 
-        must_have_other = request.form.get('must_have_other', '')
-        nice_to_have_other = request.form.get('nice_to_have_other', '')
+        print('Family Size:', family_size)
+        print('Budget:', budget)
+        print('Allergies:', allergies)
+        print('Must Have:', must_have)
+        print('Nice to Have:', nice_to_have)
 
         # Redirect with combined data as query parameters
         return redirect(url_for('scan_fridge',
+                                family_size=family_size,
+                                budget=budget,
+                                allergies=json.dumps(allergies),
                                 must_have=json.dumps(must_have),
-                                must_have_other=must_have_other,
-                                nice_to_have=json.dumps(nice_to_have),
-                                nice_to_have_other=nice_to_have_other))
+                                nice_to_have=json.dumps(nice_to_have)))
     return render_template('setup.html')
 
 
 @app.route('/scan_fridge')
 def scan_fridge():
+    family_size = request.args.get('family_size', '')
+    budget = request.args.get('budget', '')
+    allergies = json.loads(request.args.get('allergies', '[]'))
     must_have = json.loads(request.args.get('must_have', '[]'))
-    # print(must_have)
-    must_have_other = request.args.get('must_have_other', '')
-    # print(must_have_other)
     nice_to_have = json.loads(request.args.get('nice_to_have', '[]'))
-    nice_to_have_other = request.args.get('nice_to_have_other', '')
     return render_template('scan_fridge.html',
+                           family_size=family_size,
+                           budget=budget,
+                           allergies=allergies,
                            must_have=must_have,
-                           must_have_other=must_have_other,
-                           nice_to_have=nice_to_have,
-                           nice_to_have_other=nice_to_have_other)
-
-# @app.route('/scan_fridge')
-# def scan_fridge():
-#     must_have = request.args.get('must_have', '').split(',')
-#     must_have_other = request.args.get('must_have_other', '')
-#     nice_to_have = request.args.get('nice_to_have', '').split(',')
-#     nice_to_have_other = request.args.get('nice_to_have_other', '')
-#     return render_template('scan_fridge.html', must_have=must_have, must_have_other=must_have_other,
-#                            nice_to_have=nice_to_have, nice_to_have_other=nice_to_have_other)
+                           nice_to_have=nice_to_have)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -80,9 +79,7 @@ def upload_file():
         return redirect(request.url)
 
     must_have = request.form.get('must_have', '').split(',')
-    must_have_other = request.form.get('must_have_other', '')
     nice_to_have = request.form.get('nice_to_have', '').split(',')
-    nice_to_have_other = request.form.get('nice_to_have_other', '')
 
     images_data = request.form['images']
     try:
@@ -95,14 +92,12 @@ def upload_file():
                 f.write(image_data)
             items.extend(generate(file_path))
         items = list(set(items))  # Remove duplicates
-        missing_items = get_missing_items(items, must_have, must_have_other, nice_to_have, nice_to_have_other)
+        missing_items = get_missing_items(items, must_have, nice_to_have)
         return redirect(url_for('results', items=','.join(items), missing_items=','.join(missing_items)))
     except Exception as e:
         return f"Error processing images: {str(e)}", 400
 
     return redirect(request.url)
-
-
 
 @app.route('/results')
 def results():
