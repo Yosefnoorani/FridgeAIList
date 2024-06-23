@@ -789,69 +789,70 @@
 
         const allergies = Array.from(document.querySelectorAll('#allergies-tags .tag')).map(tag => tag.textContent);
 
+        const mustHaveItems = new Map();
+        const niceToHaveItems = new Map();
+
+        // Collect items from must-have drawer
         const mustHaveDrawerItems = Array.from(document.querySelectorAll('#must-have-drawer .grocery-item'));
+        mustHaveDrawerItems.forEach(item => {
+            const itemName = item.querySelector('.grocery-item-name')?.textContent;
+            const itemQuantity = item.querySelector('.item-quantity')?.textContent;
+            if (itemName && itemQuantity) {
+                mustHaveItems.set(itemName, itemQuantity);
+            }
+        });
+
+        // Collect items from must-have tags
         const mustHaveTagsItems = Array.from(document.querySelectorAll('#must-have-tags .tag-item'));
-
-        const mustHave = mustHaveDrawerItems.map(item => {
-            const itemName = item.querySelector('.grocery-item-name');
-            const itemQuantity = item.querySelector('.item-quantity');
+        mustHaveTagsItems.forEach(tagItem => {
+            const itemName = tagItem.querySelector('.item')?.textContent;
+            const itemQuantity = tagItem.querySelector('.quantity')?.textContent;
             if (itemName && itemQuantity) {
-                return {
-                    item: itemName.textContent,
-                    quantity: itemQuantity.textContent
-                };
+                mustHaveItems.set(itemName, itemQuantity);
             }
-            return null;
-        }).filter(item => item !== null);
+        });
 
-
+        // Collect items from nice-to-have drawer
         const niceToHaveDrawerItems = Array.from(document.querySelectorAll('#nice-to-have-drawer .grocery-item'));
-        const niceToHaveTagsItems = Array.from(document.querySelectorAll('#nice-to-have-tags .tag-item'));
-
-        const niceToHave = niceToHaveDrawerItems.map(item => {
-            const itemName = item.querySelector('.grocery-item-name');
-            const itemQuantity = item.querySelector('.item-quantity');
+        niceToHaveDrawerItems.forEach(item => {
+            const itemName = item.querySelector('.grocery-item-name')?.textContent;
+            const itemQuantity = item.querySelector('.item-quantity')?.textContent;
             if (itemName && itemQuantity) {
-                return {
-                    item: itemName.textContent,
-                    quantity: itemQuantity.textContent
-                };
+                niceToHaveItems.set(itemName, itemQuantity);
             }
-            return null;
-        }).filter(item => item !== null);
+        });
 
+        // Collect items from nice-to-have tags
+        const niceToHaveTagsItems = Array.from(document.querySelectorAll('#nice-to-have-tags .tag-item'));
+        niceToHaveTagsItems.forEach(tagItem => {
+            const itemName = tagItem.querySelector('.item')?.textContent;
+            const itemQuantity = tagItem.querySelector('.quantity')?.textContent;
+            if (itemName && itemQuantity) {
+                niceToHaveItems.set(itemName, itemQuantity);
+            }
+        });
 
         console.log('People:', people);
         console.log('Budget:', budget);
         console.log('Allergies:', allergies);
-        console.log('Must Have:', mustHave);
-        console.log('Nice to Have:', niceToHave);
+        console.log('Must Have:', Array.from(mustHaveItems.entries()));
+        console.log('Nice to Have:', Array.from(niceToHaveItems.entries()));
 
-        const formData = new FormData();
-        formData.append('family_size', people);
-        formData.append('budget', budget);
-        formData.append('allergies', allergies.join(','));
+        const queryParams = new URLSearchParams();
+        queryParams.append('family_size', people);
+        queryParams.append('budget', budget);
+        queryParams.append('allergies', allergies.join(','));
 
-        mustHave.forEach(item => {
-            formData.append('must_have_items[]', item.item);
-            formData.append('must_have_quantities[]', item.quantity);
+        mustHaveItems.forEach((quantity, item) => {
+            queryParams.append(`must_have_${item}`, quantity);
         });
 
-        niceToHave.forEach(item => {
-            formData.append('nice_to_have_items[]', item.item);
-            formData.append('nice_to_have_quantities[]', item.quantity);
+        niceToHaveItems.forEach((quantity, item) => {
+            queryParams.append(`nice_to_have_${item}`, quantity);
         });
 
-        fetch('{{ url_for('setup') }}', {
-            method: 'POST',
-            body: formData
-        }).then(response => {
-            if (response.redirected) {
-                window.location.href = response.url;
-            } else {
-                console.error('Form submission failed');
-            }
-        }).catch(error => console.error('Error:', error));
+        // Redirect to the URL with query parameters
+        window.location.href = `{{ url_for('scan_fridge') }}?${queryParams.toString()}`;
     }
 </script>
 </body>

@@ -16,9 +16,9 @@ def generate(file_path):
     # This function should implement the actual image processing and recognition logic
     return ['milk', 'eggs', 'butter']  # Placeholder for demo purposes
 
-def get_missing_items(items, must_have, must_have_other, nice_to_have, nice_to_have_other):
-    must_have_items = set(must_have) | set(must_have_other.split(','))
-    nice_to_have_items = set(nice_to_have) | set(nice_to_have_other.split(','))
+def get_missing_items(items, must_have, nice_to_have):
+    must_have_items = set(must_have)
+    nice_to_have_items = set(nice_to_have)
     missing_items = (must_have_items | nice_to_have_items) - set(items)
     return list(missing_items)
 
@@ -63,15 +63,18 @@ def setup():
 def scan_fridge():
     family_size = request.args.get('family_size', '')
     budget = request.args.get('budget', '')
-    allergies = json.loads(request.args.get('allergies', '[]'))
-    must_have = json.loads(request.args.get('must_have', '[]'))
-    nice_to_have = json.loads(request.args.get('nice_to_have', '[]'))
+    allergies = request.args.get('allergies', '').split(',')
+
+    must_have = {key.replace('must_have_', ''): value for key, value in request.args.items() if key.startswith('must_have_')}
+    nice_to_have = {key.replace('nice_to_have_', ''): value for key, value in request.args.items() if key.startswith('nice_to_have_')}
+
     return render_template('scan_fridge.html',
                            family_size=family_size,
                            budget=budget,
                            allergies=allergies,
                            must_have=must_have,
                            nice_to_have=nice_to_have)
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
