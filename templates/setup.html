@@ -142,6 +142,7 @@
             font-family: Inter, sans-serif;
             cursor: pointer;
             white-space: nowrap;
+            width: 80px;
         }
         .continue-button {
             border-radius: 50px;
@@ -185,7 +186,7 @@
                 width: auto;
             }
             .add-button {
-                width: auto;
+                /*width: auto;*/
             }
             .continue-button {
                 width: calc(100% - 32px);
@@ -804,6 +805,7 @@
             body: formData
         }).then(response => {
             if (response.redirected) {
+                window.location.href = response.url;
                 window.location.href = response.url;
             } else {
                 console.error('Form submission failed');
