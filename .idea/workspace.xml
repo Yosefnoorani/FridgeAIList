@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="add new design to setup added the drawer with the funcationaly v1" />
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="add move on all data v2" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -131,7 +131,127 @@
       <option name="project" value="LOCAL‎" />
       <updated>1718831593557</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL‎-00007" summary="add yaml">
+      <option name="closed" value="true" />
+      <created>1718833740387</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL‎-00007" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1718833740387</updated>
+    </task>
+    <task id="LOCAL‎-00008" summary="add gunicorn==21.2.0">
+      <option name="closed" value="true" />
+      <created>1718868418408</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL‎-00008" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1718868418408</updated>
+    </task>
+    <task id="LOCAL‎-00009" summary="update the yaml">
+      <option name="closed" value="true" />
+      <created>1718874071262</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL‎-00009" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1718874071262</updated>
+    </task>
+    <task id="LOCAL‎-00010" summary="add tmp/upload folder">
+      <option name="closed" value="true" />
+      <created>1718877490416</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL‎-00010" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1718877490416</updated>
+    </task>
+    <task id="LOCAL‎-00011" summary="fix design setup, home">
+      <option name="closed" value="true" />
+      <created>1719088685980</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL‎-00011" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719088685980</updated>
+    </task>
+    <task id="LOCAL‎-00012" summary="fix the camera html switch">
+      <option name="closed" value="true" />
+      <created>1719092396105</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL‎-00012" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719092396105</updated>
+    </task>
+    <task id="LOCAL‎-00013" summary="fix the camera html switch v1">
+      <option name="closed" value="true" />
+      <created>1719092583092</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL‎-00013" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719092583092</updated>
+    </task>
+    <task id="LOCAL‎-00014" summary="fix the camera html switch v1">
+      <option name="closed" value="true" />
+      <created>1719092717741</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL‎-00014" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719092717741</updated>
+    </task>
+    <task id="LOCAL‎-00015" summary="add free text input to the drawers of groceries">
+      <option name="closed" value="true" />
+      <created>1719142922601</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL‎-00015" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719142922602</updated>
+    </task>
+    <task id="LOCAL‎-00016" summary="add free text input to the drawers of groceries">
+      <option name="closed" value="true" />
+      <created>1719142949372</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL‎-00016" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719142949372</updated>
+    </task>
+    <task id="LOCAL‎-00017" summary="add free text input to the drawers of groceries">
+      <option name="closed" value="true" />
+      <created>1719142965892</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL‎-00017" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719142965892</updated>
+    </task>
+    <task id="LOCAL‎-00018" summary="add free text input to the drawers of groceries v1">
+      <option name="closed" value="true" />
+      <created>1719148955256</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL‎-00018" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719148955256</updated>
+    </task>
+    <task id="LOCAL‎-00019" summary="add a tag numbers">
+      <option name="closed" value="true" />
+      <created>1719152420479</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL‎-00019" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719152420479</updated>
+    </task>
+    <task id="LOCAL‎-00020" summary="add move on all data v1">
+      <option name="closed" value="true" />
+      <created>1719176492930</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL‎-00020" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719176492930</updated>
+    </task>
+    <task id="LOCAL‎-00021" summary="add move on all data v2">
+      <option name="closed" value="true" />
+      <created>1719177102647</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL‎-00021" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719177102647</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -141,6 +261,18 @@
     <MESSAGE value="add new design to setup added the drawer without the funcationaly" />
     <MESSAGE value="add new design to setup added the drawer with the funcationaly" />
     <MESSAGE value="add new design to setup added the drawer with the funcationaly v1" />
-    <option name="LAST_COMMIT_MESSAGE" value="add new design to setup added the drawer with the funcationaly v1" />
+    <MESSAGE value="add yaml" />
+    <MESSAGE value="add gunicorn==21.2.0" />
+    <MESSAGE value="update the yaml" />
+    <MESSAGE value="add tmp/upload folder" />
+    <MESSAGE value="fix design setup, home" />
+    <MESSAGE value="fix the camera html switch" />
+    <MESSAGE value="fix the camera html switch v1" />
+    <MESSAGE value="add free text input to the drawers of groceries" />
+    <MESSAGE value="add free text input to the drawers of groceries v1" />
+    <MESSAGE value="add a tag numbers" />
+    <MESSAGE value="add move on all data v1" />
+    <MESSAGE value="add move on all data v2" />
+    <option name="LAST_COMMIT_MESSAGE" value="add move on all data v2" />
   </component>
 </project>

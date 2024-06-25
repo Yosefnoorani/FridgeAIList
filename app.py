@@ -30,18 +30,12 @@ def index():
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
     if request.method == 'POST':
-        family_size = request.form.get('family_size')
-        budget = request.form.get('budget')
-        allergies = request.form.get('allergies').split(',')
-
-        must_have_items = request.form.getlist('must_have_items[]')
-        must_have_quantities = request.form.getlist('must_have_quantities[]')
-        nice_to_have_items = request.form.getlist('nice_to_have_items[]')
-        nice_to_have_quantities = request.form.getlist('nice_to_have_quantities[]')
-
-        # Combine items and quantities into tuples
-        must_have = list(zip(must_have_items, must_have_quantities))
-        nice_to_have = list(zip(nice_to_have_items, nice_to_have_quantities))
+        data = request.get_json()
+        family_size = data.get('family_size')
+        budget = data.get('budget')
+        allergies = data.get('allergies', [])
+        must_have = data.get('must_have', {})
+        nice_to_have = data.get('nice_to_have', {})
 
         print('Family Size:', family_size)
         print('Budget:', budget)
@@ -49,7 +43,6 @@ def setup():
         print('Must Have:', must_have)
         print('Nice to Have:', nice_to_have)
 
-        # Redirect with combined data as query parameters
         return redirect(url_for('scan_fridge',
                                 family_size=family_size,
                                 budget=budget,
@@ -63,10 +56,9 @@ def setup():
 def scan_fridge():
     family_size = request.args.get('family_size', '')
     budget = request.args.get('budget', '')
-    allergies = request.args.get('allergies', '').split(',')
-
-    must_have = {key.replace('must_have_', ''): value for key, value in request.args.items() if key.startswith('must_have_')}
-    nice_to_have = {key.replace('nice_to_have_', ''): value for key, value in request.args.items() if key.startswith('nice_to_have_')}
+    allergies = json.loads(request.args.get('allergies', '[]'))
+    must_have = json.loads(request.args.get('must_have', '{}'))
+    nice_to_have = json.loads(request.args.get('nice_to_have', '{}'))
 
     return render_template('scan_fridge.html',
                            family_size=family_size,
