@@ -3,22 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scan Results</title>
+    <title>Results</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+
+        .grocery-list {
+            background-color: #000;
+            display: flex;
+            max-width: 100%;
+            flex-direction: column;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .header-container {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            padding: 0 16px 24px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .title {
+            color: #69fff1;
+            align-self: end;
+            margin-top: 16px;
+            font: 400 24px 'Inter', sans-serif;
+        }
+
+        .icon-wrapper {
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            background-color: #fff;
+            align-self: start;
+            display: flex;
+            width: 40px;
+            height: 40px;
+            padding: 4px;
+        }
+
+        .icon {
+            aspect-ratio: 1;
+            object-fit: auto;
+            object-position: center;
+            width: 20px;
+            fill: #000;
+        }
+
+        .subtitle {
+            color: #fff;
+            margin-top: 8px;
+            font: 400 16px 'Inter', sans-serif;
+        }
+
+        .list-item {
+            justify-content: space-between;
+            border-color: rgba(255, 255, 255, 0.24);
+            border-style: solid;
+            border-bottom-width: 1px;
+            display: flex;
+            width: 100%;
+            gap: 20px;
+            color: black;
+            white-space: nowrap;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+
+        .list-item.strike .item-name {
+            text-decoration: line-through;
+        }
+
+        .item-name {
+            margin: auto 0;
+            font: 400 18px 'Inter', sans-serif;
+        }
+
+        .item-quantity {
+            text-align: right;
+            font: 500 18px 'Inter', sans-serif;
+        }
+
+        .action-buttons {
+            display: flex;
+            margin-top: 16px;
+            width: 100%;
+            flex-direction: column;
+            font-size: 16px;
+            font-weight: 400;
+            text-align: center;
+            padding: 0 16px;
+        }
+
+        .share-button {
+            font-family: 'Inter', sans-serif;
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            background-color: #fff;
+            color: #000;
+            padding: 12px 40px;
+            margin-bottom: 12px;
+        }
+
+        .rescan-button {
+            font-family: 'Inter', sans-serif;
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            border: 1px solid #fff;
+            color: #fff;
+            white-space: nowrap;
+            padding: 12px 40px;
+        }
+
+        @media (min-width: 480px) {
+            .grocery-list {
+                max-width: 480px;
+                padding: 24px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .list-item {
+                padding: 14px 16px;
+            }
+
+            .item-name {
+                font-size: 18px;
+            }
+
+            .item-quantity {
+                font-size: 24px;
+            }
+
+            .share-button, .rescan-button {
+                padding: 17px 60px;
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Scan Results</h1>
-    <h2>Items Found:</h2>
-    <ul>
-        {% for item in items %}
-            <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
-    <h2>Missing Items:</h2>
-    <ul>
-        {% for item in missing_items %}
-            <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
+<section class="grocery-list">
+  <header class="header-container">
+    <div class="header-content">
+      <h1 class="title">Grocery List</h1>
+      <div class="icon-wrapper">
+        <img loading="lazy" src="static/x.svg" class="icon" alt="" />
+      </div>
+    </div>
+    <p class="subtitle">Review what's missing</p>
+  </header>
+
+  <ul id="groceryList">
+    {% for item in missing_items %}
+    <li class="list-item" onclick="toggleStrike(this)">
+      <span class="item-name">{{ item }}</span>
+      <span class="item-quantity">1</span>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <div class="action-buttons">
+    <button class="share-button" onclick="shareList()">Share List</button>
+    <button class="rescan-button" onclick="rescan()">Rescan</button>
+  </div>
+</section>
+
+<script>
+    function toggleStrike(element) {
+        element.classList.toggle('strike');
+    }
+
+    function shareList() {
+        const listItems = document.querySelectorAll('.list-item');
+        const items = Array.from(listItems).map(item => item.querySelector('.item-name').textContent);
+        const shareData = {
+            title: 'Grocery List',
+            text: `Missing items:\n${items.join('\n')}`
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData).then(() => {
+                console.log('Shared successfully');
+            }).catch(error => {
+                console.error('Error sharing:', error);
+            });
+        } else {
+            alert('Sharing is not supported on this browser');
+        }
+    }
+
+    function rescan() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const family_size = urlParams.get('family_size');
+        const budget = urlParams.get('budget');
+        const allergies = urlParams.get('allergies');
+        const must_have = urlParams.get('must_have');
+        const nice_to_have = urlParams.get('nice_to_have');
+
+        window.location.href = `/scan_fridge?family_size=${family_size}&budget=${budget}&allergies=${allergies}&must_have=${must_have}&nice_to_have=${nice_to_have}`;
+    }
+</script>
 </body>
 </html>
