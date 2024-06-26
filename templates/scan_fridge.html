@@ -226,27 +226,31 @@
         let images = [];
         let currentImageIndex = -1;
         let currentFacingMode = 'environment';
+        let stream = null;
 
-        function startVideo(facingMode) {
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
-                .then((stream) => {
-                    video.srcObject = stream;
-                })
-                .catch((err) => {
-                    console.error('Error accessing camera: ', err);
-                    if (facingMode === 'environment') {
-                        startVideo('user');
-                    } else {
-                        alert('Error accessing camera. Please check your camera settings.');
-                    }
-                });
+        async function startVideo(facingMode) {
+            try {
+                // Stop any existing video stream before starting a new one
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                // Start the video with the specified facing mode
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error('Error accessing camera: ', err);
+                if (facingMode === 'environment') {
+                    // If the environment camera fails, try the user camera
+                    startVideo('user');
+                } else {
+                    alert('Error accessing camera. Please check your camera settings.');
+                }
+            }
         }
 
-        startVideo(currentFacingMode);
-
-        switchCameraButton.addEventListener('click', () => {
+        switchCameraButton.addEventListener('click', async () => {
             currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
-            startVideo(currentFacingMode);
+            await startVideo(currentFacingMode);
         });
 
         captureButton.addEventListener('click', () => {
@@ -331,8 +335,10 @@
                 imageLabel.textContent = `${currentImageIndex + 1} / ${images.length}`;
             }
         }
-        // Ensure the switch camera button appears on the video
-        video.style.position = 'relative';
+
+        // Start the video with the initial facing mode
+        startVideo(currentFacingMode);
+        ;
     </script>
 </body>
 </html>
