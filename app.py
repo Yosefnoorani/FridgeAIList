@@ -1,10 +1,11 @@
-import json
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, session
 import os
 import base64
-from detected_fridge_items import generate_list  # Import the generate_list function
+import json
+from detected_fridge_items import generate_list
 
 app = Flask(__name__)
+app.secret_key = 'supersecretkey'  # Needed for session management
 app.config['UPLOAD_FOLDER'] = '/tmp/uploads'
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
@@ -27,40 +28,23 @@ def index():
 def setup():
     if request.method == 'POST':
         data = request.get_json()
-        family_size = data.get('family_size')
-        budget = data.get('budget')
-        allergies = data.get('allergies', [])
-        must_have = data.get('must_have', {})
-        nice_to_have = data.get('nice_to_have', {})
+        session['family_size'] = data.get('family_size')
+        session['budget'] = data.get('budget')
+        session['allergies'] = data.get('allergies', [])
+        session['must_have'] = data.get('must_have', {})
+        session['nice_to_have'] = data.get('nice_to_have', {})
 
-        print('Family Size:', family_size)
-        print('Budget:', budget)
-        print('Allergies:', allergies)
-        print('Must Have:', must_have)
-        print('Nice to Have:', nice_to_have)
-
-        return redirect(url_for('scan_fridge',
-                                family_size=family_size,
-                                budget=budget,
-                                allergies=json.dumps(allergies),
-                                must_have=json.dumps(must_have),
-                                nice_to_have=json.dumps(nice_to_have)))
+        return redirect(url_for('scan_fridge'))
     return render_template('setup.html')
 
 @app.route('/scan_fridge')
 def scan_fridge():
-    family_size = request.args.get('family_size', '')
-    budget = request.args.get('budget', '')
-    allergies = json.loads(request.args.get('allergies', '[]'))
-    must_have = json.loads(request.args.get('must_have', '{}'))
-    nice_to_have = json.loads(request.args.get('nice_to_have', '{}'))
-
     return render_template('scan_fridge.html',
-                           family_size=family_size,
-                           budget=budget,
-                           allergies=allergies,
-                           must_have=must_have,
-                           nice_to_have=nice_to_have)
+                           family_size=session.get('family_size', ''),
+                           budget=session.get('budget', ''),
+                           allergies=session.get('allergies', []),
+                           must_have=session.get('must_have', {}),
+                           nice_to_have=session.get('nice_to_have', {}))
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -91,9 +75,7 @@ def upload_file():
         items = list(set(items))  # Remove duplicates
         missing_items = get_missing_items(items, must_have, nice_to_have)
 
-        return redirect(url_for('results', items=','.join(items), missing_items=','.join(missing_items),
-                                must_have=json.dumps(request.args.get('must_have', '{}')),
-                                nice_to_have=json.dumps(request.args.get('nice_to_have', '{}'))))
+        return redirect(url_for('results', items=','.join(items), missing_items=','.join(missing_items)))
     except Exception as e:
         return f"Error processing images: {str(e)}", 400
 
@@ -103,8 +85,8 @@ def upload_file():
 def results():
     items = request.args.get('items', '').split(',')
     missing_items = request.args.get('missing_items', '').split(',')
-    must_have = json.loads(request.args.get('must_have', '{}'))
-    nice_to_have = json.loads(request.args.get('nice_to_have', '{}'))
+    must_have = session.get('must_have', {})
+    nice_to_have = session.get('nice_to_have', {})
     return render_template('results.html', items=items, missing_items=missing_items, must_have=must_have, nice_to_have=nice_to_have)
 
 if __name__ == '__main__':

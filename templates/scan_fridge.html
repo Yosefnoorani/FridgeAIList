@@ -181,6 +181,9 @@
             <div class="overlay-text">
                 Please capture at least 4 to 7 images of your fridge.
             </div>
+            <button class="device-upload-button" onclick="document.getElementById('fileInput').click()" aria-label="Upload from Device">
+                <img src="{{ url_for('static', filename='upload-icon.png') }}" alt="Upload from Device" style="width: 30px; height: 30px;">
+            </button>
         </div>
         <div class="thumbnail-container">
             <div class="counter" id="counter">0</div>
@@ -189,8 +192,9 @@
         <button class="capture-button" id="capture" aria-label="Capture Image"></button>
         <button class="upload-button" id="upload" disabled aria-label="Upload Images">Continue</button>
         <button class="switch-camera-button" id="switchCamera" aria-label="Switch Camera">
-        <img src="{{ url_for('static', filename='camera-switch-icon.png') }}" alt="Switch Camera" style="width: 30px; height: 30px;">
+            <img src="{{ url_for('static', filename='camera-switch-icon.svg') }}" alt="Switch Camera" style="width: 30px; height: 30px;">
         </button>
+        <input type="file" id="fileInput" multiple accept="image/*" style="display: none;" onchange="handleFiles(this.files)">
         <canvas id="canvas" style="display: none;"></canvas>
         <div id="galleryModal" class="gallery-modal" role="dialog" aria-modal="true" aria-labelledby="galleryTitle">
             <div class="gallery-content">
@@ -207,7 +211,6 @@
             <input type="hidden" name="must_have" value="{{ must_have | join(',') }}">
             <input type="hidden" name="nice_to_have" value="{{ nice_to_have | join(',') }}">
         </form>
-
     </div>
     <script>
         const video = document.getElementById('video');
@@ -222,6 +225,7 @@
         const galleryImage = document.getElementById('galleryImage');
         const imageLabel = document.getElementById('imageLabel');
         const switchCameraButton = document.getElementById('switchCamera');
+        const deviceUploadButton = document.getElementsByClassName('device-upload-button')[0];
         let images = [];
         let currentImageIndex = -1;
         let currentFacingMode = 'environment';
@@ -229,17 +233,14 @@
 
         async function startVideo(facingMode) {
             try {
-                // Stop any existing video stream before starting a new one
                 if (stream) {
                     stream.getTracks().forEach(track => track.stop());
                 }
-                // Start the video with the specified facing mode
                 stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } });
                 video.srcObject = stream;
             } catch (err) {
                 console.error('Error accessing camera: ', err);
                 if (facingMode === 'environment') {
-                    // If the environment camera fails, try the user camera
                     startVideo('user');
                 } else {
                     alert('Error accessing camera. Please check your camera settings.');
@@ -335,9 +336,27 @@
             }
         }
 
-        // Start the video with the initial facing mode
+        async function handleFiles(files) {
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    images.push(e.target.result);
+                    counter.textContent = images.length;
+                    if (images.length >= 4) {
+                        uploadButton.disabled = false;
+                    }
+                    if (images.length >= 7) {
+                        captureButton.disabled = true;
+                    }
+                    imageDataInput.value = JSON.stringify(images);
+                    updateThumbnail();
+                    showCaptureFeedback();
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
         startVideo(currentFacingMode);
-        ;
     </script>
 </body>
 </html>

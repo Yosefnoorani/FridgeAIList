@@ -7,7 +7,7 @@ import mimetypes
 
 
 def generate_list(image_paths):
-    google_api_key = "AIzaSyDra4rh0oD4P3PcpiRYEyFy6dl1mywTaEI"  # It's not recommended to hardcode your API key
+    google_api_key = "AIzamywTaEI"  # It's not recommended to hardcode your API key
     genai.configure(api_key=google_api_key)
     model = genai.GenerativeModel('gemini-1.5-flash')
 
