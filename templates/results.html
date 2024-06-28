@@ -183,7 +183,9 @@
     {% for item in missing_items %}
     <li class="list-item" onclick="toggleStrike(this)">
       <span class="item-name">{{ item }}</span>
-      <span class="item-quantity">1</span>
+      <span class="item-quantity">
+        {{ must_have.get(item) or nice_to_have.get(item) or '1' }}
+      </span>
     </li>
     {% endfor %}
   </ul>

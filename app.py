@@ -2,6 +2,7 @@ import json
 from flask import Flask, request, redirect, url_for, render_template
 import os
 import base64
+from detected_fridge_items import generate_list  # Import the generate_list function
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '/tmp/uploads'
@@ -10,11 +11,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
-
-def generate(file_path):
-    # This function should implement the actual image processing and recognition logic
-    return ['milk', 'eggs', 'butter']  # Placeholder for demo purposes
+    return '.' in filename and filename.rsplit('.', 1).lower() in {'png', 'jpg', 'jpeg', 'gif'}
 
 def get_missing_items(items, must_have, nice_to_have):
     must_have_items = set(must_have)
@@ -25,7 +22,6 @@ def get_missing_items(items, must_have, nice_to_have):
 @app.route('/')
 def index():
     return render_template('home.html')
-
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -51,7 +47,6 @@ def setup():
                                 nice_to_have=json.dumps(nice_to_have)))
     return render_template('setup.html')
 
-
 @app.route('/scan_fridge')
 def scan_fridge():
     family_size = request.args.get('family_size', '')
@@ -67,7 +62,6 @@ def scan_fridge():
                            must_have=must_have,
                            nice_to_have=nice_to_have)
 
-
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'images' not in request.form:
@@ -79,16 +73,27 @@ def upload_file():
     images_data = request.form['images']
     try:
         images = json.loads(images_data)
-        items = []
+        image_paths = []
         for i, image_data in enumerate(images):
             image_data = base64.b64decode(image_data.split(',')[1])
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], f'uploaded_image_{i}.png')
             with open(file_path, 'wb') as f:
                 f.write(image_data)
-            items.extend(generate(file_path))
+            image_paths.append(file_path)
+
+        response = generate_list(image_paths)
+        response_data = json.loads(response)
+
+        if not response_data.get("success"):
+            return f"Error processing images: {response_data.get('data')}", 400
+
+        items = response_data.get("items", [])
         items = list(set(items))  # Remove duplicates
         missing_items = get_missing_items(items, must_have, nice_to_have)
-        return redirect(url_for('results', items=','.join(items), missing_items=','.join(missing_items)))
+
+        return redirect(url_for('results', items=','.join(items), missing_items=','.join(missing_items),
+                                must_have=json.dumps(request.args.get('must_have', '{}')),
+                                nice_to_have=json.dumps(request.args.get('nice_to_have', '{}'))))
     except Exception as e:
         return f"Error processing images: {str(e)}", 400
 
@@ -98,7 +103,9 @@ def upload_file():
 def results():
     items = request.args.get('items', '').split(',')
     missing_items = request.args.get('missing_items', '').split(',')
-    return render_template('results.html', items=items, missing_items=missing_items)
+    must_have = json.loads(request.args.get('must_have', '{}'))
+    nice_to_have = json.loads(request.args.get('nice_to_have', '{}'))
+    return render_template('results.html', items=items, missing_items=missing_items, must_have=must_have, nice_to_have=nice_to_have)
 
 if __name__ == '__main__':
     app.run(debug=True)
