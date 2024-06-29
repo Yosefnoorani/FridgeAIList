@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="secret api key">
-      <change afterPath="$PROJECT_DIR$/static/camera-switch-icon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/upload-icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/detected_fridge_items.py" beforeDir="false" afterPath="$PROJECT_DIR$/detected_fridge_items.py" afterDir="false" />
-    </list>
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="secret api key" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -367,7 +362,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1719695021919</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL‎-00032" summary="secret api key">
+      <option name="closed" value="true" />
+      <created>1719697066684</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL‎-00032" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719697066684</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

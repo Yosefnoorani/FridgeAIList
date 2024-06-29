@@ -22,7 +22,7 @@ def generate_list(image_paths):
     if is_running_in_cloud():
         # Cloud-specific code
         print("Running in the cloud")
-        secret_key = get_secret("secret-key")
+        secret_key = get_secret("GOOGLE_API_KEY")
     else:
         # Local-specific code
         print("Running locally")
