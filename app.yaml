@@ -4,3 +4,6 @@ entrypoint: gunicorn -b :$PORT app:app
 handlers:
 - url: /.*
   script: auto
+
+env_variables:
+  RUNNING_IN_CLOUD: "true"

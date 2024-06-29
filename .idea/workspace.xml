@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="icon of uplaod from device">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="secret api key">
+      <change afterPath="$PROJECT_DIR$/static/camera-switch-icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/upload-icon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/detected_fridge_items.py" beforeDir="false" afterPath="$PROJECT_DIR$/detected_fridge_items.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -350,11 +351,26 @@
       <option name="project" value="LOCAL‎" />
       <updated>1719564839365</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL‎-00030" summary="icon of uplaod from device">
+      <option name="closed" value="true" />
+      <created>1719694971334</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL‎-00030" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719694971334</updated>
+    </task>
+    <task id="LOCAL‎-00031" summary="secret api key">
+      <option name="closed" value="true" />
+      <created>1719695021919</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL‎-00031" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719695021919</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="init" />
     <MESSAGE value="add new design to setup (without drawer)" />
     <MESSAGE value="add new design to setup (with drawer of allergy)" />
     <MESSAGE value="add new design to setup added the drawer without the funcationaly" />
@@ -379,7 +395,8 @@
     <MESSAGE value="add backend DFI" />
     <MESSAGE value="add backend DFI ה1" />
     <MESSAGE value="icon of uplaod from device" />
-    <option name="LAST_COMMIT_MESSAGE" value="icon of uplaod from device" />
+    <MESSAGE value="secret api key" />
+    <option name="LAST_COMMIT_MESSAGE" value="secret api key" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

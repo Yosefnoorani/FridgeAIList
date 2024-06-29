@@ -13,6 +13,7 @@ def get_secret(secret_id, project_id="fridgelist-426921", version_id="latest"):
     response = client.access_secret_version(request={"name": name})
     return response.payload.data.decode("UTF-8")
 
+
 def generate_list(image_paths):
     def is_running_in_cloud():
         return os.getenv('RUNNING_IN_CLOUD') == 'true'
