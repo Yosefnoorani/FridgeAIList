@@ -1,14 +1,37 @@
 import os
 from PIL import Image as PILImage
+from google.cloud import secretmanager
 import google.generativeai as genai
 import json
 import io
 import mimetypes
 
 
+def get_secret(secret_id, project_id="fridgelist-426921", version_id="latest"):
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+    response = client.access_secret_version(request={"name": name})
+    return response.payload.data.decode("UTF-8")
+
+
 def generate_list(image_paths):
-    google_api_key = "AIzamywTaEI"  # It's not recommended to hardcode your API key
-    genai.configure(api_key=google_api_key)
+    def is_running_in_cloud():
+        return os.getenv('RUNNING_IN_CLOUD') == 'true'
+
+    # secret_key = None
+    if is_running_in_cloud():
+        # Cloud-specific code
+        print("Running in the cloud")
+        secret_key = get_secret("secret-key")
+    else:
+        # Local-specific code
+        print("Running locally")
+        secret_key = os.getenv('GOOGLE_API_KEY')
+
+
+
+
+    genai.configure(api_key=secret_key)
     model = genai.GenerativeModel('gemini-1.5-flash')
 
     images = []
