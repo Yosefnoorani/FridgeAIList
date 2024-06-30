@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="secret api key v1">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="secret api key v2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/detected_fridge_items.py" beforeDir="false" afterPath="$PROJECT_DIR$/detected_fridge_items.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/results.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/results.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/scan_fridge.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/scan_fridge.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/setup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/setup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/shopping_list.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +52,7 @@
       <recent name="C:\Users\yosef\PycharmProjects\FridgeAIList" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.detected_fridge_items">
+  <component name="RunManager" selected="Python.app">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FridgeAIList" />
       <option name="ENV_FILES" value="" />
@@ -56,7 +60,6 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="google_api_key" value="AIzaSyA2W4Qr95YZ_pDoEIDypxwrYAK513_YY6o" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -100,8 +103,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.detected_fridge_items" />
         <item itemvalue="Python.app" />
+        <item itemvalue="Python.detected_fridge_items" />
       </list>
     </recent_temporary>
   </component>
@@ -385,11 +388,18 @@
       <option name="project" value="LOCAL‎" />
       <updated>1719697376107</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL‎-00034" summary="secret api key v2">
+      <option name="closed" value="true" />
+      <created>1719739529543</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL‎-00034" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719739529543</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add new design to setup (with drawer of allergy)" />
     <MESSAGE value="add new design to setup added the drawer without the funcationaly" />
     <MESSAGE value="add new design to setup added the drawer with the funcationaly" />
     <MESSAGE value="add new design to setup added the drawer with the funcationaly v1" />
@@ -414,7 +424,8 @@
     <MESSAGE value="icon of uplaod from device" />
     <MESSAGE value="secret api key" />
     <MESSAGE value="secret api key v1" />
-    <option name="LAST_COMMIT_MESSAGE" value="secret api key v1" />
+    <MESSAGE value="secret api key v2" />
+    <option name="LAST_COMMIT_MESSAGE" value="secret api key v2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

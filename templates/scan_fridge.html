@@ -6,6 +6,7 @@
     <title>Scan Your Fridge</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
+        /* Existing CSS */
         body, html {
             margin: 0;
             padding: 0;
@@ -172,10 +173,37 @@
             border: none;
             cursor: pointer;
         }
+
+        /* New CSS for error popup */
+        .error-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            z-index: 1000;
+        }
+        .error-popup p {
+            margin-bottom: 20px;
+        }
+        .error-popup button {
+            background-color: #ff4d4d;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Existing HTML -->
         <video id="video" autoplay></video>
         <div class="overlay">
             <div class="overlay-text">
@@ -211,6 +239,10 @@
             <input type="hidden" name="must_have" value="{{ must_have | join(',') }}">
             <input type="hidden" name="nice_to_have" value="{{ nice_to_have | join(',') }}">
         </form>
+    </div>
+    <div id="errorPopup" class="error-popup">
+        <p id="errorMessage">{{ error_message }}</p>
+        <button onclick="rescan()">Rescan</button>
     </div>
     <script>
         const video = document.getElementById('video');
@@ -356,7 +388,22 @@
             }
         }
 
+        function rescan() {
+            window.location.href = '/scan_fridge';
+        }
+
         startVideo(currentFacingMode);
+
+        // Display error popup if error_message is set
+        window.onload = function() {
+            const errorMessage = "{{ error_message }}";
+            if (errorMessage) {
+                const errorPopup = document.getElementById('errorPopup');
+                const errorMessageElement = document.getElementById('errorMessage');
+                errorMessageElement.textContent = errorMessage;
+                errorPopup.style.display = 'block';
+            }
+        }
     </script>
 </body>
 </html>

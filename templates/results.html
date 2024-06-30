@@ -223,12 +223,14 @@
     function rescan() {
         const urlParams = new URLSearchParams(window.location.search);
         const family_size = urlParams.get('family_size');
-        const budget = urlParams.get('budget');
+        // const budget = urlParams.get('budget');
         const allergies = urlParams.get('allergies');
         const must_have = urlParams.get('must_have');
         const nice_to_have = urlParams.get('nice_to_have');
 
-        window.location.href = `/scan_fridge?family_size=${family_size}&budget=${budget}&allergies=${allergies}&must_have=${must_have}&nice_to_have=${nice_to_have}`;
+        // window.location.href = `/scan_fridge?family_size=${family_size}&budget=${budget}&allergies=${allergies}&must_have=${must_have}&nice_to_have=${nice_to_have}`;
+        window.location.href = `/scan_fridge?family_size=${family_size}&allergies=${allergies}&must_have=${must_have}&nice_to_have=${nice_to_have}`;
+
     }
 </script>
 </body>

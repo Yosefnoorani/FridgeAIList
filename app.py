@@ -69,15 +69,18 @@ def upload_file():
         response_data = json.loads(response)
 
         if not response_data.get("success"):
-            return f"Error processing images: {response_data.get('data')}", 400
+            error_message = response_data.get('data') or 'Unknown error occurred during image processing.'
+            return render_template('scan_fridge.html', error_message=error_message)
 
         items = response_data.get("items", [])
         items = list(set(items))  # Remove duplicates
         missing_items = get_missing_items(items, must_have, nice_to_have)
 
         return redirect(url_for('results', items=','.join(items), missing_items=','.join(missing_items)))
+    except json.JSONDecodeError:
+        return render_template('scan_fridge.html', error_message='Invalid image data format.')
     except Exception as e:
-        return f"Error processing images: {str(e)}", 400
+        return render_template('scan_fridge.html', error_message=str(e))
 
     return redirect(request.url)
 
