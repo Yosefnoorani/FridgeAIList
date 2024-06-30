@@ -31,7 +31,7 @@ def get_secret():
         load_dotenv()
         # secret_key = os.environ.get('GOOGLE_API_KEY')
         secret_key = os.getenv('GOOGLE_API_KEY')
-        print(secret_key)
+        # print(secret_key)
 
     return secret_key
 
