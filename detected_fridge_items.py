@@ -76,7 +76,9 @@ def generate_list(image_paths):
     with their approximate quantities. For each product, state the name, quantity, and if possible, 
     the current state (e.g., full, half full, almost empty). Summarize the information across all images 
     to ensure an accurate inventory of the refrigerator's contents. Do not classify by shelf or drawer. 
-    Return the results in JSON format. 
+    Return the results in JSON format: 
+    {"success": true, "items": [{"name": "the Item Name 1", "quantity": number, "state": "full or half"}, 
+    {"name": "the Item Name 2", "quantity": number, "state": "full or half"}]}
     If you were unable to identify it, return the value false to the key named success; if you were able 
     to identify it, return a value true.
     """

@@ -46,6 +46,7 @@ def scan_fridge():
                            must_have=session.get('must_have', {}),
                            nice_to_have=session.get('nice_to_have', {}))
 
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'images' not in request.form:
@@ -67,16 +68,26 @@ def upload_file():
 
         response = generate_list(image_paths)
         response_data = json.loads(response)
+        print(response_data)
 
         if not response_data.get("success"):
             error_message = response_data.get('data') or 'Unknown error occurred during image processing.'
             return render_template('scan_fridge.html', error_message=error_message)
 
         items = response_data.get("items", [])
-        items = list(set(items))  # Remove duplicates
-        missing_items = get_missing_items(items, must_have, nice_to_have)
 
-        return redirect(url_for('results', items=','.join(items), missing_items=','.join(missing_items)))
+        # Remove duplicates based on item names
+        seen_items = set()
+        unique_items = []
+        for item in items:
+            if item['name'] not in seen_items:
+                seen_items.add(item['name'])
+                unique_items.append(item)
+
+        missing_items = get_missing_items([item['name'] for item in unique_items], must_have, nice_to_have)
+
+        return redirect(url_for('results', items=','.join([item['name'] for item in unique_items]),
+                                missing_items=','.join(missing_items)))
     except json.JSONDecodeError:
         return render_template('scan_fridge.html', error_message='Invalid image data format.')
     except Exception as e:
