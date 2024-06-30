@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="secret api key" />
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="secret api key v1">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/detected_fridge_items.py" beforeDir="false" afterPath="$PROJECT_DIR$/detected_fridge_items.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -40,6 +43,11 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\yosef\PycharmProjects\FridgeAIList" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.detected_fridge_items">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FridgeAIList" />
@@ -70,7 +78,6 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="GOOGLE_API_KEY" value="AIzaSyA2W4Qr95YZ_pDoEIDypxwrYAK513_YY6o" />
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
@@ -370,11 +377,18 @@
       <option name="project" value="LOCAL‎" />
       <updated>1719697066684</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL‎-00033" summary="secret api key v1">
+      <option name="closed" value="true" />
+      <created>1719697376107</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL‎-00033" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1719697376107</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add new design to setup (without drawer)" />
     <MESSAGE value="add new design to setup (with drawer of allergy)" />
     <MESSAGE value="add new design to setup added the drawer without the funcationaly" />
     <MESSAGE value="add new design to setup added the drawer with the funcationaly" />
@@ -399,7 +413,8 @@
     <MESSAGE value="add backend DFI ה1" />
     <MESSAGE value="icon of uplaod from device" />
     <MESSAGE value="secret api key" />
-    <option name="LAST_COMMIT_MESSAGE" value="secret api key" />
+    <MESSAGE value="secret api key v1" />
+    <option name="LAST_COMMIT_MESSAGE" value="secret api key v1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

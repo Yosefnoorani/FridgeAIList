@@ -5,16 +5,18 @@ import google.generativeai as genai
 import json
 import io
 import mimetypes
+from dotenv import load_dotenv
 
 
-def get_secret(secret_id, project_id="fridgelist-426921", version_id="latest"):
+
+def get_secret_cloud(secret_id, project_id="fridgelist-426921", version_id="latest"):
     client = secretmanager.SecretManagerServiceClient()
     name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
     response = client.access_secret_version(request={"name": name})
     return response.payload.data.decode("UTF-8")
 
 
-def generate_list(image_paths):
+def get_secret():
     def is_running_in_cloud():
         return os.getenv('RUNNING_IN_CLOUD') == 'true'
 
@@ -22,13 +24,23 @@ def generate_list(image_paths):
     if is_running_in_cloud():
         # Cloud-specific code
         print("Running in the cloud")
-        secret_key = get_secret("GOOGLE_API_KEY")
+        secret_key = get_secret_cloud("GOOGLE_API_KEY")
     else:
         # Local-specific code
         print("Running locally")
+        load_dotenv()
+        # secret_key = os.environ.get('GOOGLE_API_KEY')
         secret_key = os.getenv('GOOGLE_API_KEY')
+        print(secret_key)
+
+    return secret_key
 
 
+
+def generate_list(image_paths):
+
+
+    secret_key = get_secret()
 
 
     genai.configure(api_key=secret_key)
