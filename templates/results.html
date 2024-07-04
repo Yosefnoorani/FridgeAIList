@@ -15,121 +15,120 @@
         }
 
         .grocery-list {
-          background-color: #000;
-          display: flex;
-          width: 100%;
-          flex-direction: column;
-          margin: 0;
-          padding: 16px;
+            background-color: #000;
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            margin: 0;
+            padding: 16px;
         }
 
         .header-container {
-          display: flex;
-          flex-direction: column;
-          padding: 0 16px 24px;
+            display: flex;
+            flex-direction: column;
+            padding: 0 16px 24px;
         }
         .header-content {
-          display: flex;
-          align-items: flex-start;
-          gap: 10px;
-          justify-content: space-between;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            justify-content: space-between;
         }
 
         .title {
-          color: #69fff1;
-          align-self: end;
-          margin-top: 16px;
-          font: 400 24px 'Inter', sans-serif;
+            color: #69fff1;
+            align-self: end;
+            margin-top: 16px;
+            font: 400 24px 'Inter', sans-serif;
         }
 
         .icon-wrapper {
-          justify-content: center;
-          align-items: center;
-          border-radius: 999px;
-          backdrop-filter: blur(10px);
-          background-color: #fff;
-          align-self: start;
-          display: flex;
-          width: 40px;
-          height: 40px;
-          padding: 4px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            background-color: #fff;
+            align-self: start;
+            display: flex;
+            width: 40px;
+            height: 40px;
+            padding: 4px;
         }
 
         .icon {
-          aspect-ratio: 1;
-          object-fit: auto;
-          object-position: center;
-          width: 20px;
-          fill: #000;
+            aspect-ratio: 1;
+            object-fit: auto;
+            object-position: center;
+            width: 20px;
+            fill: #000;
         }
 
         .subtitle {
-          color: #fff;
-          margin-top: 8px;
-          font: 400 16px 'Inter', sans-serif;
+            color: #fff;
+            margin-top: 8px;
+            font: 400 16px 'Inter', sans-serif;
         }
 
         .list-item {
-          justify-content: space-between;
-          border-color: rgba(255, 255, 255, 0.24);
-          border-style: solid;
-          border-bottom-width: 1px;
-          display: flex;
-          gap: 20px;
-          color: black;
-          white-space: nowrap;
-          padding: 14px 16px;
-          cursor: pointer;
+            justify-content: space-between;
+            border-color: rgba(255, 255, 255, 0.24);
+            border-style: solid;
+            border-bottom-width: 1px;
+            display: flex;
+            gap: 20px;
+            color: black;
+            white-space: nowrap;
+            padding: 14px 16px;
+            cursor: pointer;
         }
 
         .list-item.strike .item-name {
-          text-decoration: line-through;
+            text-decoration: line-through;
         }
 
         .item-name {
-          margin: auto 0;
-          font: 400 18px 'Inter', sans-serif;
+            margin: auto 0;
+            font: 400 18px 'Inter', sans-serif;
         }
 
         .item-quantity {
-          text-align: right;
-          font: 500 18px 'Inter', sans-serif;
+            text-align: right;
+            font: 500 18px 'Inter', sans-serif;
         }
 
         .action-buttons {
-          display: flex;
-          margin-top: 16px;
-          flex-direction: column;
-          font-size: 16px;
-          font-weight: 400;
-          text-align: center;
-          padding: 0 16px;
+            display: flex;
+            margin-top: 16px;
+            flex-direction: column;
+            font-size: 16px;
+            font-weight: 400;
+            text-align: center;
+            padding: 0 16px;
         }
 
         .share-button {
-          font-family: 'Inter', sans-serif;
-          justify-content: center;
-          align-items: center;
-          border-radius: 999px;
-          backdrop-filter: blur(10px);
-          background-color: #fff;
-          color: #000;
-          padding: 12px 40px;
-          margin-bottom: 12px;
+            font-family: 'Inter', sans-serif;
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            background-color: #fff;
+            color: #000;
+            padding: 12px 40px;
+            margin-bottom: 12px;
         }
 
         .rescan-button {
-          font-family: 'Inter', sans-serif;
-          justify-content: center;
-          align-items: center;
-          border-radius: 999px;
-          backdrop-filter: blur(10px);
-          border: 1px solid #fff;
-          color: black;
-          white-space: nowrap;
-          padding: 12px 40px;
+            font-family: 'Inter', sans-serif;
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            border: 1px solid #fff;
+            color: black;
+            white-space: nowrap;
+            padding: 12px 40px;
         }
-
 
         @media (min-width: 480px) {
             .grocery-list {
@@ -177,12 +176,10 @@
   </header>
 
   <ul id="groceryList">
-    {% for item in missing_items %}
+    {% for item, quantity in missing_items.items() %}
     <li class="list-item" onclick="toggleStrike(this)">
       <span class="item-name">{{ item }}</span>
-      <span class="item-quantity">
-        {{ must_have.get(item) or nice_to_have.get(item) or '1' }}
-      </span>
+      <span class="item-quantity">{{ quantity }}</span>
     </li>
     {% endfor %}
   </ul>
@@ -220,14 +217,11 @@
     function rescan() {
         const urlParams = new URLSearchParams(window.location.search);
         const family_size = urlParams.get('family_size');
-        // const budget = urlParams.get('budget');
         const allergies = urlParams.get('allergies');
         const must_have = urlParams.get('must_have');
         const nice_to_have = urlParams.get('nice_to_have');
 
-        // window.location.href = `/scan_fridge?family_size=${family_size}&budget=${budget}&allergies=${allergies}&must_have=${must_have}&nice_to_have=${nice_to_have}`;
         window.location.href = `/scan_fridge?family_size=${family_size}&allergies=${allergies}&must_have=${must_have}&nice_to_have=${nice_to_have}`;
-
     }
 </script>
 </body>

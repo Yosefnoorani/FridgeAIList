@@ -37,6 +37,7 @@
             padding: 10px;
             border-radius: 5px;
         }
+
         .capture-button {
             position: absolute;
             bottom: 30px;
@@ -199,11 +200,32 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        /* Loader CSS */
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 1000;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Existing HTML -->
+        <div class="loader" id="loader"></div>
         <video id="video" autoplay></video>
         <div class="overlay">
             <div class="overlay-text">
@@ -236,8 +258,8 @@
         </div>
         <form id="uploadForm" action="{{ url_for('upload_file') }}" method="post" style="display: none;">
             <input type="hidden" name="images" id="imageData">
-            <input type="hidden" name="must_have" value="{{ must_have | join(',') }}">
-            <input type="hidden" name="nice_to_have" value="{{ nice_to_have | join(',') }}">
+            <input type="hidden" name="must_have" id="mustHaveData">
+            <input type="hidden" name="nice_to_have" id="niceToHaveData">
         </form>
     </div>
     <div id="errorPopup" class="error-popup">
@@ -245,6 +267,13 @@
         <button onclick="rescan()">Rescan</button>
     </div>
     <script>
+        // Assuming must_have and nice_to_have are defined as JavaScript objects
+        const must_have = {{ must_have | tojson | safe }};
+        const nice_to_have = {{ nice_to_have | tojson | safe }};
+
+        document.getElementById('mustHaveData').value = JSON.stringify(must_have);
+        document.getElementById('niceToHaveData').value = JSON.stringify(nice_to_have);
+
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const captureButton = document.getElementById('capture');
@@ -258,6 +287,7 @@
         const imageLabel = document.getElementById('imageLabel');
         const switchCameraButton = document.getElementById('switchCamera');
         const deviceUploadButton = document.getElementsByClassName('device-upload-button')[0];
+        const loader = document.getElementById('loader');
         let images = [];
         let currentImageIndex = -1;
         let currentFacingMode = 'environment';
@@ -404,6 +434,47 @@
                 errorPopup.style.display = 'block';
             }
         }
+
+        function showLoader() {
+            loader.style.display = 'block';
+            captureButton.disabled = true;
+            uploadButton.disabled = true;
+        }
+
+        // Function to hide the loader and enable buttons
+        function hideLoader() {
+            loader.style.display = 'none';
+            captureButton.disabled = images.length >= 7; // Re-enable based on images count
+            uploadButton.disabled = images.length < 4;  // Re-enable based on images count
+        }
+
+        uploadButton.addEventListener('click', () => {
+            showLoader();
+            setTimeout(() => {
+                uploadForm.submit();
+            }, 1000); // Simulating an upload process; remove this line in production
+        });
+
+        captureButton.addEventListener('click', () => {
+            showLoader();
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/png');
+            images.push(imageData);
+            counter.textContent = images.length;
+            if (images.length >= 4) {
+                uploadButton.disabled = false;
+            }
+            if (images.length >= 7) {
+                captureButton.disabled = true;
+            }
+            imageDataInput.value = JSON.stringify(images);
+            updateThumbnail();
+            showCaptureFeedback();
+            hideLoader();
+        });
     </script>
 </body>
 </html>
