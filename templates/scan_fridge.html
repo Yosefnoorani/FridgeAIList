@@ -264,12 +264,12 @@
     </div>
     <div id="errorPopup" class="error-popup">
         <p id="errorMessage">{{ error_message }}</p>
-        <button onclick="rescan()">Rescan</button>
+        <button onclick="closeErrorPopup()">Close</button>
     </div>
     <script>
         // Assuming must_have and nice_to_have are defined as JavaScript objects
-        const must_have = {{ must_have | tojson | safe }};
-        const nice_to_have = {{ nice_to_have | tojson | safe }};
+        const must_have = {{ must_have | tojson | safe }} || {};
+        const nice_to_have = {{ nice_to_have | tojson | safe }} || {};
 
         document.getElementById('mustHaveData').value = JSON.stringify(must_have);
         document.getElementById('niceToHaveData').value = JSON.stringify(nice_to_have);
@@ -435,6 +435,11 @@
             }
         }
 
+        function closeErrorPopup() {
+            const errorPopup = document.getElementById('errorPopup');
+            errorPopup.style.display = 'none';
+        }
+
         function showLoader() {
             loader.style.display = 'block';
             captureButton.disabled = true;
@@ -452,7 +457,7 @@
             showLoader();
             setTimeout(() => {
                 uploadForm.submit();
-            }, 1000); // Simulating an upload process; remove this line in production
+            }, 1000000000); // Simulating an upload process; remove this line in production
         });
 
         captureButton.addEventListener('click', () => {

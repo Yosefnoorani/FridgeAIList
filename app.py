@@ -3,6 +3,9 @@ import os
 import base64
 import json
 from detected_fridge_items import generate_list
+from detected_fridge_items import get_missing_items, sanitize_items
+
+
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # Needed for session management
@@ -11,21 +14,35 @@ app.config['UPLOAD_FOLDER'] = '/tmp/uploads'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
+
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1).lower() in {'png', 'jpg', 'jpeg', 'gif'}
 
-def get_missing_items(scanned_items, must_have):
-    missing_items = {}
-    for item, quantity in must_have.items():
-        scanned_item = next((si for si in scanned_items if si['name'].lower() == item.lower()), None)
-        if scanned_item:
-
-            remaining_quantity = int(quantity) - scanned_item['quantity']
-            if remaining_quantity > 0:
-                missing_items[item] = remaining_quantity
-        else:
-            missing_items[item] = (quantity)
-    return missing_items
+# def singularize(name):
+#     return p.singular_noun(name) if p.singular_noun(name) else name
+#
+# def get_missing_items(scanned_items, must_have):
+#     missing_items = {}
+#     scanned_items_dict = {singularize(item['name'].lower()): item['quantity'] for item in scanned_items}
+#     for item, quantity in must_have.items():
+#         sanitized_quantity = sanitize_quantity(quantity)
+#         item_singular = singularize(item.lower())
+#         scanned_quantity = scanned_items_dict.get(item_singular, 0)
+#         remaining_quantity = sanitized_quantity - scanned_quantity
+#         if remaining_quantity > 0:
+#             missing_items[item_singular] = remaining_quantity
+#     return missing_items
+#
+# def sanitize_quantity(quantity):
+#     try:
+#         sanitized_quantity = int(''.join(filter(str.isdigit, str(quantity))))
+#         return sanitized_quantity
+#     except ValueError:
+#         return 0
+#
+# def sanitize_items(items):
+#     return {item: sanitize_quantity(quantity) for item, quantity in items.items()}
 
 @app.route('/')
 def index():
@@ -43,28 +60,6 @@ def setup():
         return redirect(url_for('scan_fridge'))
     return render_template('setup.html')
 
-@app.route('/scan_fridge')
-def scan_fridge():
-    family_size = session.get('family_size', '')
-    budget = session.get('budget', '')
-    allergies = session.get('allergies', [])
-    must_have = session.get('must_have', {})
-    nice_to_have = session.get('nice_to_have', {})
-
-    # Ensure must_have and nice_to_have are dictionaries
-    if must_have is None:
-        must_have = {}
-    if nice_to_have is None:
-        nice_to_have = {}
-
-    return render_template('scan_fridge.html',
-                           family_size=family_size,
-                           budget=budget,
-                           allergies=allergies,
-                           must_have=must_have,
-                           nice_to_have=nice_to_have)
-
-
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'images' not in request.form:
@@ -78,6 +73,9 @@ def upload_file():
         nice_to_have = json.loads(nice_to_have)
     except json.JSONDecodeError as e:
         return render_template('scan_fridge.html', error_message=f'Error decoding JSON: {str(e)}')
+
+    must_have = sanitize_items(must_have)
+    nice_to_have = sanitize_items(nice_to_have)
 
     images_data = request.form['images']
     try:
@@ -96,22 +94,23 @@ def upload_file():
 
         if not response_data.get("success"):
             error_message = response_data.get('data') or 'Unknown error occurred during image processing.'
-            return render_template('scan_fridge.html', error_message=error_message)
+            return render_template('scan_fridge.html', error_message=error_message, must_have=must_have, nice_to_have=nice_to_have)
 
         items = response_data.get("items", [])
 
         # Debugging print statements
         print("Items from scan:", items)
         print("Must have items:", must_have)
+        print("Nice to have items:", nice_to_have)
 
-        missing_items = get_missing_items(items, must_have)
+        missing_items, nice_to_have_changes = get_missing_items(items, must_have, nice_to_have)
 
-        return redirect(url_for('results', items=json.dumps(items), missing_items=json.dumps(missing_items)))
+        return redirect(url_for('results', items=json.dumps(items), missing_items=json.dumps(missing_items), nice_to_have=json.dumps(nice_to_have_changes)))
     except json.JSONDecodeError as e:
-        return render_template('scan_fridge.html', error_message='Invalid image data format.')
+        return render_template('scan_fridge.html', error_message='Invalid image data format.', must_have=must_have, nice_to_have=nice_to_have)
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
-        return render_template('scan_fridge.html', error_message=str(e))
+        return render_template('scan_fridge.html', error_message=str(e), must_have=must_have, nice_to_have=nice_to_have)
 
     return redirect(request.url)
 
@@ -120,10 +119,36 @@ def upload_file():
 def results():
     items = json.loads(request.args.get('items', '[]'))
     missing_items = json.loads(request.args.get('missing_items', '{}'))
+    nice_to_have_changes = json.loads(request.args.get('nice_to_have', '{}'))
+    must_have = session.get('must_have', {})
+    return render_template('results.html', items=items, missing_items=missing_items, must_have=must_have, nice_to_have=nice_to_have_changes)
+
+
+@app.route('/scan_fridge')
+def scan_fridge():
+    family_size = session.get('family_size', '')
+    budget = session.get('budget', '')
+    allergies = session.get('allergies', [])
     must_have = session.get('must_have', {})
     nice_to_have = session.get('nice_to_have', {})
-    return render_template('results.html', items=items, missing_items=missing_items, must_have=must_have, nice_to_have=nice_to_have)
+
+    # Ensure must_have and nice_to_have are dictionaries
+    if must_have is None:
+        must_have = {}
+    if nice_to_have is None:
+        nice_to_have = {}
+
+    error_message = request.args.get('error_message', '')
+
+    return render_template('scan_fridge.html',
+                           family_size=family_size,
+                           budget=budget,
+                           allergies=allergies,
+                           must_have=must_have,
+                           nice_to_have=nice_to_have,
+                           error_message=error_message)
+
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

@@ -6,7 +6,9 @@ import json
 import io
 import mimetypes
 from dotenv import load_dotenv
+import inflect
 
+p = inflect.engine()
 
 
 def get_secret_cloud(secret_id, project_id="fridgelist-426921", version_id="latest"):
@@ -121,6 +123,46 @@ def validate_json(response):
         updated_json = json.dumps(updated_data)
         # print(updated_json)
         return updated_json
+
+
+def singularize(name):
+    return p.singular_noun(name) if p.singular_noun(name) else name
+
+
+def get_missing_items(scanned_items, must_have, nice_to_have):
+    missing_items = {}
+    nice_to_have_changes = {}
+    scanned_items_dict = {singularize(item['name'].lower()): item['quantity'] for item in scanned_items}
+
+    for item, quantity in must_have.items():
+        sanitized_quantity = sanitize_quantity(quantity)
+        item_singular = singularize(item.lower())
+        scanned_quantity = scanned_items_dict.get(item_singular, 0)
+        remaining_quantity = sanitized_quantity - scanned_quantity
+        if remaining_quantity > 0:
+            missing_items[item_singular] = remaining_quantity
+
+    for item, quantity in nice_to_have.items():
+        sanitized_quantity = sanitize_quantity(quantity)
+        item_singular = singularize(item.lower())
+        scanned_quantity = scanned_items_dict.get(item_singular, 0)
+        if sanitized_quantity > scanned_quantity:
+            nice_to_have_changes[item_singular] = sanitized_quantity - scanned_quantity
+
+    return missing_items, nice_to_have_changes
+
+
+def sanitize_quantity(quantity):
+    try:
+        sanitized_quantity = int(''.join(filter(str.isdigit, str(quantity))))
+        return sanitized_quantity
+    except ValueError:
+        return 0
+
+
+def sanitize_items(items):
+    return {item: sanitize_quantity(quantity) for item, quantity in items.items()}
+
 
 if __name__ == '__main__':
 

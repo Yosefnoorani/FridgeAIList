@@ -69,6 +69,12 @@
             font: 400 16px 'Inter', sans-serif;
         }
 
+        .list-title {
+            color: #69fff1;
+            font: 400 20px 'Inter', sans-serif;
+            margin-top: 16px;
+        }
+
         .list-item {
             justify-content: space-between;
             border-color: rgba(255, 255, 255, 0.24);
@@ -175,12 +181,27 @@
     <p class="subtitle">Review what's missing</p>
   </header>
 
+  <h2 class="list-title">Must Have Items</h2>
   <ul id="groceryList">
     {% for item, quantity in missing_items.items() %}
-    <li class="list-item" onclick="toggleStrike(this)">
-      <span class="item-name">{{ item }}</span>
-      <span class="item-quantity">{{ quantity }}</span>
-    </li>
+      {% if quantity > 0 %}
+        <li class="list-item" onclick="toggleStrike(this)">
+          <span class="item-name">{{ item }}</span>
+          <span class="item-quantity">{{ quantity }}</span>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+
+  <h2 class="list-title">Nice to Have Items</h2>
+  <ul id="niceToHaveList">
+    {% for item, quantity in nice_to_have.items() %}
+      {% if quantity > 0 %}
+        <li class="list-item" onclick="toggleStrike(this)">
+          <span class="item-name">{{ item }}</span>
+          <span class="item-quantity">{{ quantity }}</span>
+        </li>
+      {% endif %}
     {% endfor %}
   </ul>
 
