@@ -39,7 +39,7 @@ def get_secret():
 
 
 
-def generate_list(image_paths):
+def generate_list(image_paths, allergen_list  =["Milk","Egg" ], num_people =2):
 
 
     secret_key = get_secret()
@@ -72,18 +72,30 @@ def generate_list(image_paths):
             print(f"Error with image {path}: {e}")
             return json.dumps({"success": False, "data": f"Error with image {path}: {e}"})
 
-    content = """
-    Please analyze the attached photos of the contents of the refrigerator. 
-    Identify the products visible in each image and provide a list of those products along 
-    with their approximate quantities. For each product, state the name, quantity, and if possible, 
-    the current state (e.g., full, half full, almost empty). Summarize the information across all images 
-    to ensure an accurate inventory of the refrigerator's contents. Do not classify by shelf or drawer. 
-    Return the results in JSON format: 
-    {"success": true, "items": [{"name": "the Item Name 1", "quantity": number, "state": "full or half"}, 
-    {"name": "the Item Name 2", "quantity": number, "state": "full or half"}]}
-    If you were unable to identify it, return the value false to the key named success; if you were able 
-    to identify it, return a value true.
+    string_template  = """
+    Please analyze the attached photos of the refrigerator contents. Your task is to identify the products visible in each image and provide a detailed list, including their approximate quantities.
+
+    Requirements:
+    
+    For each product, provide:
+    Name
+    Quantity (number only)
+    
+    Summarize the information across all images to create an accurate inventory of the refrigerator's contents.
+    Do not classify items by shelf or drawer.
+    Remove duplicate items.
+    Return the results in JSON format.
+    
+    Special Instructions:
+    for any items are allergenic from this list: {allergen_list}, mark the allergenic items with ! at the beginning of the word and suggest an alternative item marked with ** at the beginning of the word.
+    If you are unable to identify any item, return false for the key named success. If you successfully identified all items, return true for the key named success.
+    Remove any unknown food items.
+    Combine the duplicate items into one field
+    Tailor the list to accommodate the number of people: {num_people}.
     """
+
+    content = string_template.format(allergen_list=allergen_list, num_people=num_people)
+
 
     parts = [{'text': content}] + [{'inline_data': image} for image in images]
 

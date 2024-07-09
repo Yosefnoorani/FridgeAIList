@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="add loader">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="final 05/07">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/detected_fridge_items.py" beforeDir="false" afterPath="$PROJECT_DIR$/detected_fridge_items.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/results.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/results.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/scan_fridge.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/scan_fridge.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -452,7 +449,23 @@
       <option name="project" value="LOCAL‎" />
       <updated>1720101413151</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL‎-00042" summary="final 05/07">
+      <option name="closed" value="true" />
+      <created>1720131617478</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL‎-00042" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1720131617478</updated>
+    </task>
+    <task id="LOCAL‎-00043" summary="final 05/07">
+      <option name="closed" value="true" />
+      <created>1720131645107</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL‎-00043" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1720131645107</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -467,7 +480,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add tmp/upload folder" />
     <MESSAGE value="fix design setup, home" />
     <MESSAGE value="fix the camera html switch" />
     <MESSAGE value="fix the camera html switch v1" />
@@ -492,7 +504,8 @@
     <MESSAGE value="fix the calculation v1 (without the quantity) v3" />
     <MESSAGE value="fix design setup, result and styles" />
     <MESSAGE value="add loader" />
-    <option name="LAST_COMMIT_MESSAGE" value="add loader" />
+    <MESSAGE value="final 05/07" />
+    <option name="LAST_COMMIT_MESSAGE" value="final 05/07" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
