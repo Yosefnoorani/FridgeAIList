@@ -14,35 +14,42 @@
             color: #fff;
         }
 
+        h1, h2 {
+            color: #69fff1;
+            text-align: center;
+        }
         .grocery-list {
             background-color: #000;
             display: flex;
+            max-width: 480px;
             width: 100%;
+            height: 100%;
             flex-direction: column;
-            margin: 0;
-            padding: 16px;
+            margin: 0 auto;
+            padding: 24px 16px;
         }
 
         .header-container {
             display: flex;
             flex-direction: column;
-            padding: 0 16px 24px;
+            padding: 0 0 24px;
         }
+
         .header-content {
             display: flex;
             align-items: flex-start;
-            gap: 10px;
+            gap: 20px;
             justify-content: space-between;
         }
 
         .title {
             color: #69fff1;
             align-self: end;
-            margin-top: 16px;
+            margin-top: 24px;
             font: 400 24px 'Inter', sans-serif;
         }
 
-        .icon-wrapper {
+        .avatar-container {
             justify-content: center;
             align-items: center;
             border-radius: 999px;
@@ -50,16 +57,25 @@
             background-color: #fff;
             align-self: start;
             display: flex;
+            flex-direction: column;
             width: 40px;
             height: 40px;
             padding: 4px;
         }
 
-        .icon {
+        .avatar-wrapper {
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+            display: flex;
+            padding: 10px;
+        }
+
+        .avatar-icon {
             aspect-ratio: 1;
             object-fit: auto;
             object-position: center;
-            width: 20px;
+            width: 12px;
             fill: #000;
         }
 
@@ -69,47 +85,111 @@
             font: 400 16px 'Inter', sans-serif;
         }
 
-        .list-title {
-            color: #69fff1;
-            font: 400 20px 'Inter', sans-serif;
-            margin-top: 16px;
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 80px;
         }
 
-        .list-item {
+        .list-item,
+        .allergy-item,
+        .alternative-item {
             justify-content: space-between;
             border-color: rgba(255, 255, 255, 0.24);
             border-style: solid;
+            border-style: solid;
             border-bottom-width: 1px;
             display: flex;
-            gap: 20px;
-            color: black;
-            white-space: nowrap;
-            padding: 14px 16px;
+            gap: 16px;
+            padding: 0px 16px;
             cursor: pointer;
+            align-items: center;
+            border-radius: 50px;
+            margin-bottom: 7px;
         }
 
-        .list-item.strike .item-name {
-            text-decoration: line-through;
+        .item-content {
+            display: flex;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 400;
+            flex: 1;
+            margin: auto 0;
+        }
+
+        .item-icon {
+            aspect-ratio: 1;
+            object-fit: auto;
+            object-position: center;
+            width: 18px;
+            fill: #69fff1;
+            margin: auto 0;
         }
 
         .item-name {
-            margin: auto 0;
-            font: 400 18px 'Inter', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         .item-quantity {
+            justify-content: center;
             text-align: right;
-            font: 500 18px 'Inter', sans-serif;
+            font: 500 24px 'Inter', sans-serif;
         }
 
-        .action-buttons {
+        .allergy-item {
+            color: #ff8796;
+        }
+
+        .alternative-content {
             display: flex;
-            margin-top: 16px;
+            gap: 12px;
+            font-size: 18px;
+            color: #69fff1;
+            font-weight: 400;
+            flex: 1;
+            margin: auto 0;
+        }
+
+        .alternative-icon {
+            aspect-ratio: 1.28;
+            object-fit: auto;
+            object-position: center;
+            width: 18px;
+            fill: #fff;
+            align-self: stretch;
+            margin: auto 0;
+        }
+
+        .alternative-check {
+            aspect-ratio: 1;
+            object-fit: auto;
+            object-position: center;
+            width: 18px;
+            fill: #fff;
+            margin: auto 0;
+        }
+
+        .alternative-name {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .alternative-quantity {
+            justify-content: center;
+            align-self: stretch;
+            color: #fff;
+            white-space: nowrap;
+            text-align: right;
+            font: 500 24px 'Inter', sans-serif;
+        }
+
+        .action-container {
+            display: flex;
+            width: 100%;
             flex-direction: column;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 400;
             text-align: center;
-            padding: 0 16px;
+            padding: 0;
         }
 
         .share-button {
@@ -120,8 +200,10 @@
             backdrop-filter: blur(10px);
             background-color: #fff;
             color: #000;
-            padding: 12px 40px;
+            padding: 17px 60px;
             margin-bottom: 12px;
+            font-weight: bold;
+            font-size: 18px;
         }
 
         .rescan-button {
@@ -131,94 +213,135 @@
             border-radius: 999px;
             backdrop-filter: blur(10px);
             border: 1px solid #fff;
-            color: black;
+            color: #000;
             white-space: nowrap;
-            padding: 12px 40px;
+            padding: 12px 60px;
+            font-weight: bold;
+            font-size: 18px;
+
         }
 
-        @media (min-width: 480px) {
-            .grocery-list {
-                max-width: 480px;
-                padding: 24px;
-            }
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
 
-            .title {
-                font-size: 24px;
-            }
+        .radio-button {
+            margin-right: 12px;
+            cursor: pointer;
+        }
 
-            .subtitle {
-                font-size: 18px;
-            }
+        .radio-button.checked .radio-button-icon {
+            fill: green;
+        }
 
-            .list-item {
-                padding: 14px 16px;
-            }
+        .radio-button-icon {
+            width: 18px;
+            height: 18px;
+        }
+        .checkbox-container {
+          display: flex;
+          align-items: center;
+        }
 
-            .item-name {
-                font-size: 18px;
-            }
+        .custom-checkbox {
+          display: none;
+        }
 
-            .item-quantity {
-                font-size: 24px;
-            }
+        .custom-checkbox-label {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          border: 2px solid #ccc;
+          background-color: white;
+          position: relative;
+          cursor: pointer;
+          margin: 0;
+        }
 
-            .share-button, .rescan-button {
-                padding: 17px 60px;
-                font-size: 18px;
-            }
+        .custom-checkbox:checked + .custom-checkbox-label {
+          background-color: #69fff1;
+          border-color: #69fff1;
+        }
+
+        .custom-checkbox:checked + .custom-checkbox-label::after {
+          content: '✔️';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: white;
+          font-size: 10px;
         }
     </style>
 </head>
 <body>
 <section class="grocery-list">
-  <header class="header-container">
-    <div class="header-content">
-      <h1 class="title">Grocery List</h1>
-      <div class="icon-wrapper">
-        <img loading="lazy" src="static/x.svg" class="icon" alt="" />
-      </div>
-    </div>
-    <p class="subtitle">Review what's missing</p>
-  </header>
+    <header class="header-container">
+        <div class="header-content">
+            <h1 class="title">Grocery List</h1>
+            <div class="avatar-container">
+                <div class="avatar-wrapper">
+                    <img loading="lazy" src="static/x.svg" class="avatar-icon" alt="Avatar" />
+                </div>
+            </div>
+        </div>
+        <p class="subtitle">Review what's missing</p>
+    </header>
 
-  <h2 class="list-title">Must Have Items</h2>
-  <ul id="groceryList">
-    {% for item, quantity in missing_items.items() %}
-      {% if quantity > 0 %}
-        <li class="list-item" onclick="toggleStrike(this)">
-          <span class="item-name">{{ item }}</span>
-          <span class="item-quantity">{{ quantity }}</span>
-        </li>
-      {% endif %}
-    {% endfor %}
-  </ul>
+    <main class="list-container">
+        <h2 class="list-title">Must Have Items</h2>
+        {% for item, quantity in missing_items.items() %}
+          <article class="list-item" onclick="toggleCheck(this)">
+            <div class="item-content">
+              <div class="checkbox-container">
+                <input type="checkbox" id="customCheckbox{{ loop.index }}" class="custom-checkbox" />
+                <label for="customCheckbox{{ loop.index }}" class="custom-checkbox-label"></label>
+              </div>
+              <p class="item-name">{{ item }}</p>
+            </div>
+            <span class="item-quantity">{{ quantity }}</span>
+          </article>
+          {% endfor %}
+                <h2 class="list-title">Nice Have Items</h2>
+                {% for item, quantity in nice_to_have.items() %}
+                <article class="list-item" onclick="toggleCheck(this)">
+            <div class="item-content">
+              <div class="checkbox-container">
+                <input type="checkbox" id="customCheckboxSecond{{ loop.index }}" class="custom-checkbox" />
+                <label for="customCheckboxSecond{{ loop.index }}" class="custom-checkbox-label"></label>
+              </div>
+              <p class="item-name">{{ item }}</p>
+            </div>
+            <span class="item-quantity">{{ quantity }}</span>
+          </article>
+          {% endfor %}
+    </main>
 
-  <h2 class="list-title">Nice to Have Items</h2>
-  <ul id="niceToHaveList">
-    {% for item, quantity in nice_to_have.items() %}
-      {% if quantity > 0 %}
-        <li class="list-item" onclick="toggleStrike(this)">
-          <span class="item-name">{{ item }}</span>
-          <span class="item-quantity">{{ quantity }}</span>
-        </li>
-      {% endif %}
-    {% endfor %}
-  </ul>
-
-  <div class="action-buttons">
-    <button class="share-button" onclick="shareList()">Share List</button>
-    <button class="rescan-button" onclick="rescan()">Rescan</button>
-  </div>
+    <footer class="action-container">
+        <button class="share-button" onclick="shareList()">Share List</button>
+        <button class="rescan-button" onclick="rescan()">Rescan</button>
+    </footer>
 </section>
 
 <script>
-    function toggleStrike(element) {
-        element.classList.toggle('strike');
+    function toggleCheck(element) {
+      // Prevent the label from toggling the checkbox again
+      const checkbox = element.querySelector('.custom-checkbox');
+      checkbox.checked = !checkbox.checked;
+      console.log(element);
     }
 
     function shareList() {
-        const listItems = document.querySelectorAll('.list-item');
-        const items = Array.from(listItems).map(item => item.querySelector('.item-name').textContent);
+        const listItems = document.querySelectorAll('.list-item .item-name');
+        const items = Array.from(listItems).map(item => item.textContent);
         const shareData = {
             title: 'Grocery List',
             text: `Missing items:\n${items.join('\n')}`
@@ -236,13 +359,7 @@
     }
 
     function rescan() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const family_size = urlParams.get('family_size');
-        const allergies = urlParams.get('allergies');
-        const must_have = urlParams.get('must_have');
-        const nice_to_have = urlParams.get('nice_to_have');
-
-        window.location.href = `/scan_fridge?family_size=${family_size}&allergies=${allergies}&must_have=${must_have}&nice_to_have=${nice_to_have}`;
+        window.location.href = '/scan_fridge';
     }
 </script>
 </body>

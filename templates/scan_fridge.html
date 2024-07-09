@@ -28,14 +28,20 @@
         .overlay {
             position: absolute;
             top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
+            /* transform: translateX(-50%); */
             text-align: center;
+            display: flex;
+            width: 100%;
+            padding: 0 20px;
+            justify-content: center;
+            align-items: center;
         }
         .overlay-text {
             background-color: rgba(0, 0, 0, 0.5);
             padding: 10px;
             border-radius: 5px;
+            margin: 0 45px;
         }
 
         .capture-button {
@@ -167,9 +173,6 @@
             font-size: 16px;
         }
         .switch-camera-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
             background-color: transparent;
             border: none;
             cursor: pointer;
@@ -228,11 +231,14 @@
         <div class="loader" id="loader"></div>
         <video id="video" autoplay></video>
         <div class="overlay">
+            <button class="switch-camera-button" id="switchCamera" aria-label="Switch Camera">
+                <img src="{{ url_for('static', filename='camera-switch-icon.svg') }}" alt="Switch Camera" style="width: 30px; height: 30px;">
+            </button>
             <div class="overlay-text">
                 Please capture at least 4 to 7 images of your fridge.
             </div>
             <button class="device-upload-button" onclick="document.getElementById('fileInput').click()" aria-label="Upload from Device">
-                <img src="{{ url_for('static', filename='upload-icon.png') }}" alt="Upload from Device" style="width: 30px; height: 30px;">
+                <img src="/static/upload-icon.svg" alt="Upload from Device" style="width: 30px; height: 30px;">
             </button>
         </div>
         <div class="thumbnail-container">
@@ -241,9 +247,7 @@
         </div>
         <button class="capture-button" id="capture" aria-label="Capture Image"></button>
         <button class="upload-button" id="upload" disabled aria-label="Upload Images">Continue</button>
-        <button class="switch-camera-button" id="switchCamera" aria-label="Switch Camera">
-            <img src="{{ url_for('static', filename='camera-switch-icon.svg') }}" alt="Switch Camera" style="width: 30px; height: 30px;">
-        </button>
+
         <input type="file" id="fileInput" multiple accept="image/*" style="display: none;" onchange="handleFiles(this.files)">
         <canvas id="canvas" style="display: none;"></canvas>
         <div id="galleryModal" class="gallery-modal" role="dialog" aria-modal="true" aria-labelledby="galleryTitle">
@@ -457,7 +461,7 @@
             showLoader();
             setTimeout(() => {
                 uploadForm.submit();
-            }, 000); // Simulating an upload process; remove this line in production
+            }, 10000000); // Simulating an upload process; remove this line in production
         });
 
         captureButton.addEventListener('click', () => {

@@ -121,8 +121,20 @@ def results():
     missing_items = json.loads(request.args.get('missing_items', '{}'))
     nice_to_have_changes = json.loads(request.args.get('nice_to_have', '{}'))
     must_have = session.get('must_have', {})
-    return render_template('results.html', items=items, missing_items=missing_items, must_have=must_have, nice_to_have=nice_to_have_changes)
+    allergies = session.get('allergies', [])
 
+    # Process allergy items
+    allergy_items = []
+    for item in items:
+        if item['name'] in allergies:
+            allergy_items.append({
+                'name': item['name'],
+                'alternative': item.get('alternative', 'None'),
+                'quantity': item['quantity']
+            })
+
+    return render_template('results.html', items=items, missing_items=missing_items, must_have=must_have,
+                           nice_to_have=nice_to_have_changes, allergy_items=allergy_items)
 
 @app.route('/scan_fridge')
 def scan_fridge():
@@ -151,4 +163,4 @@ def scan_fridge():
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
