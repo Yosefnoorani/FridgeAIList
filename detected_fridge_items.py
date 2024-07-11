@@ -39,7 +39,7 @@ def get_secret():
 
 
 
-def generate_list(image_paths, allergen_list  =["Milk","Egg" ], num_people =2):
+def generate_list(image_paths, allergen_list, num_people):
 
 
     secret_key = get_secret()
@@ -72,27 +72,32 @@ def generate_list(image_paths, allergen_list  =["Milk","Egg" ], num_people =2):
             print(f"Error with image {path}: {e}")
             return json.dumps({"success": False, "data": f"Error with image {path}: {e}"})
 
+    # allergen_list_str = ', '.join(f'"{allergen}"' for allergen in allergen_list)
+
     string_template  = """
     Please analyze the attached photos of the refrigerator contents. Your task is to identify the products visible in each image and provide a detailed list, including their approximate quantities.
 
     Requirements:
-    
+
     For each product, provide:
     Name
     Quantity (number only)
-    
+
     Summarize the information across all images to create an accurate inventory of the refrigerator's contents.
     Do not classify items by shelf or drawer.
     Remove duplicate items.
     Return the results in JSON format.
-    
+
     Special Instructions:
-    for any items are allergenic from this list: {allergen_list}, mark the allergenic items with ! at the beginning of the word and suggest an alternative item marked with ** at the beginning of the word.
+    Put all Items under "items" key and every item with key "name"
+    For each item that produces an allergen from this list: {allergen_list}, provide an appropriate alternative and add the alternative to the allergen item JSON string with a new key named alternative.
     If you are unable to identify any item, return false for the key named success. If you successfully identified all items, return true for the key named success.
     Remove any unknown food items.
     Combine the duplicate items into one field
     Tailor the list to accommodate the number of people: {num_people}.
     """
+
+
 
     content = string_template.format(allergen_list=allergen_list, num_people=num_people)
 
@@ -101,6 +106,7 @@ def generate_list(image_paths, allergen_list  =["Milk","Egg" ], num_people =2):
 
     try:
         response = model.generate_content({'parts': parts}, stream=True)
+        # print(response)
         response.resolve()
     except Exception as e:
         print(f"Error generating content: {e}")
@@ -125,7 +131,7 @@ def validate_json(response):
             return json.dumps({"success": False, "data": "Invalid JSON response"})
 
         updated_json = json.dumps(parsed_data)
-        print(updated_json)
+        # print(updated_json)
         return updated_json
     else:
         updated_data = {
@@ -161,6 +167,28 @@ def get_missing_items(scanned_items, must_have, nice_to_have):
         if sanitized_quantity > scanned_quantity:
             nice_to_have_changes[item_singular] = sanitized_quantity - scanned_quantity
 
+        # missing_items = """
+        # {
+        #     "success": true,
+        #     "items": [
+        #         {"name": "Milk", "quantity": 3, "alternative": "Soy Milk"}
+        #         {"name": "aaaa2", "quantity": 2}
+        #         {"name": "bread", "quantity": 1, "alternative": "bbbb"}
+        #     ]
+        # }
+        # """
+        #
+        # nice_to_have_changes = """
+        # {
+        #     "success": true,
+        #     "items": [
+        #         {"name": "sugar", "quantity": 1}
+        #         {"name": "Nutella", "quantity": 1, "alternative": "Chocolate Hashahar"}
+        #         {"name": "Soda", "quantity": 1}
+        #     ]
+        # }
+        # """
+
     return missing_items, nice_to_have_changes
 
 
@@ -192,7 +220,7 @@ if __name__ == '__main__':
                                 r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-15.jpg"])
 
 
-    print(prt)
+    # print(prt)
 
 
 

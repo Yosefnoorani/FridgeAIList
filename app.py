@@ -88,7 +88,14 @@ def upload_file():
                 f.write(image_data)
             image_paths.append(file_path)
 
-        response = generate_list(image_paths)
+        # Retrieve allergen_list and num_people from session
+        allergen_list = session.get('allergies', [])
+        num_people = session.get('family_size', 1)
+
+        # Pass image_paths, allergen_list, and num_people to generate_list
+        print("allergen list: ", allergen_list)
+        print("num_people: ", num_people)
+        response = generate_list(image_paths, allergen_list, num_people)
         response_data = json.loads(response)
         print(response_data)
 
@@ -115,6 +122,7 @@ def upload_file():
     return redirect(request.url)
 
 
+
 @app.route('/results')
 def results():
     items = json.loads(request.args.get('items', '[]'))
@@ -123,18 +131,32 @@ def results():
     must_have = session.get('must_have', {})
     allergies = session.get('allergies', [])
 
-    # Process allergy items
-    allergy_items = []
-    for item in items:
-        if item['name'] in allergies:
-            allergy_items.append({
-                'name': item['name'],
-                'alternative': item.get('alternative', 'None'),
-                'quantity': item['quantity']
-            })
+    # Create a dictionary of scanned items for easier lookup
+    scanned_items_dict = {item['name'].lower(): item for item in items}
 
-    return render_template('results.html', items=items, missing_items=missing_items, must_have=must_have,
-                           nice_to_have=nice_to_have_changes, allergy_items=allergy_items)
+    # Process must_have items
+    must_have_items = []
+    for must_item, quantity in must_have.items():
+        if int(quantity) > 0:  # Only add items with a quantity greater than 0
+            item_name = must_item.lower()
+            item_data = {'name': must_item, 'quantity': quantity}
+            if item_name in scanned_items_dict and 'alternative' in scanned_items_dict[item_name]:
+                item_data['alternative'] = scanned_items_dict[item_name]['alternative']
+            must_have_items.append(item_data)
+
+    # Process nice_to_have items
+    nice_to_have_items = []
+    for nice_item, quantity in nice_to_have_changes.items():
+        if int(quantity) > 0:  # Only add items with a quantity greater than 0
+            item_name = nice_item.lower()
+            item_data = {'name': nice_item, 'quantity': quantity}
+            if item_name in scanned_items_dict and 'alternative' in scanned_items_dict[item_name]:
+                item_data['alternative'] = scanned_items_dict[item_name]['alternative']
+            nice_to_have_items.append(item_data)
+
+    return render_template('results.html', must_have=must_have_items, nice_to_have=nice_to_have_items)
+
+
 
 @app.route('/scan_fridge')
 def scan_fridge():

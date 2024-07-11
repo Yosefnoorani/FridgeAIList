@@ -545,7 +545,7 @@
                 <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Chicken Breast', -1)">
                     <img loading="lazy" src="static/minus.svg" class="control-icon" alt="Decrease quantity">
                 </div>
-                <span class="item-quantity">0kg</span>
+                <span class="item-quantity">0</span>
                 <div class="control-icon-wrapper" onclick="changeGroceryQuantity('Chicken Breast', 1)">
                     <img loading="lazy" src="static/plus.svg" class="icon" alt="Increase quantity">
                 </div>
@@ -694,7 +694,7 @@
                 if (quantityElement) {
                     let currentQuantity = parseInt(quantityElement.textContent.replace('kg', '')) || 0;
                     currentQuantity = Math.max(0, currentQuantity + delta);
-                    quantityElement.textContent = currentQuantity + (item === 'Chicken Breast' ? 'kg' : '');
+                    quantityElement.textContent = currentQuantity //+ (item); // === 'Chicken Breast' ? 'kg' : '');
                 }
             }
         });

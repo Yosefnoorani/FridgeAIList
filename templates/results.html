@@ -18,6 +18,7 @@
             color: #69fff1;
             text-align: center;
         }
+
         .grocery-list {
             background-color: #000;
             display: flex;
@@ -61,6 +62,7 @@
             width: 40px;
             height: 40px;
             padding: 4px;
+            cursor: pointer; /* Add cursor pointer */
         }
 
         .avatar-wrapper {
@@ -96,7 +98,6 @@
         .alternative-item {
             justify-content: space-between;
             border-color: rgba(255, 255, 255, 0.24);
-            border-style: solid;
             border-style: solid;
             border-bottom-width: 1px;
             display: flex;
@@ -140,46 +141,9 @@
             color: #ff8796;
         }
 
-        .alternative-content {
-            display: flex;
-            gap: 12px;
-            font-size: 18px;
-            color: #69fff1;
-            font-weight: 400;
-            flex: 1;
-            margin: auto 0;
-        }
-
-        .alternative-icon {
-            aspect-ratio: 1.28;
-            object-fit: auto;
-            object-position: center;
-            width: 18px;
-            fill: #fff;
-            align-self: stretch;
-            margin: auto 0;
-        }
-
-        .alternative-check {
-            aspect-ratio: 1;
-            object-fit: auto;
-            object-position: center;
-            width: 18px;
-            fill: #fff;
-            margin: auto 0;
-        }
-
         .alternative-name {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .alternative-quantity {
-            justify-content: center;
-            align-self: stretch;
-            color: #fff;
-            white-space: nowrap;
-            text-align: right;
-            font: 500 24px 'Inter', sans-serif;
+            color: #69fff1;
+            font-size: 14px;
         }
 
         .action-container {
@@ -192,7 +156,7 @@
             padding: 0;
         }
 
-        .share-button {
+        .share-button, .share-page-button {
             font-family: 'Inter', sans-serif;
             justify-content: center;
             align-items: center;
@@ -218,7 +182,6 @@
             padding: 12px 60px;
             font-weight: bold;
             font-size: 18px;
-
         }
 
         .visually-hidden {
@@ -246,39 +209,40 @@
             width: 18px;
             height: 18px;
         }
+
         .checkbox-container {
-          display: flex;
-          align-items: center;
+            display: flex;
+            align-items: center;
         }
 
         .custom-checkbox {
-          display: none;
+            display: none;
         }
 
         .custom-checkbox-label {
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          border: 2px solid #ccc;
-          background-color: white;
-          position: relative;
-          cursor: pointer;
-          margin: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            background-color: white;
+            position: relative;
+            cursor: pointer;
+            margin: 0;
         }
 
         .custom-checkbox:checked + .custom-checkbox-label {
-          background-color: #69fff1;
-          border-color: #69fff1;
+            background-color: #69fff1;
+            border-color: #69fff1;
         }
 
         .custom-checkbox:checked + .custom-checkbox-label::after {
-          content: '✔️';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          color: white;
-          font-size: 10px;
+            content: '✔️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 10px;
         }
     </style>
 </head>
@@ -287,9 +251,9 @@
     <header class="header-container">
         <div class="header-content">
             <h1 class="title">Grocery List</h1>
-            <div class="avatar-container">
+            <div class="avatar-container" onclick="location.href='/setup'">
                 <div class="avatar-wrapper">
-                    <img loading="lazy" src="static/x.svg" class="avatar-icon" alt="Avatar" />
+                    <img loading="lazy" src="{{ url_for('static', filename='x.svg') }}" class="avatar-icon" alt="Avatar" />
                 </div>
             </div>
         </div>
@@ -298,45 +262,53 @@
 
     <main class="list-container">
         <h2 class="list-title">Must Have Items</h2>
-        {% for item, quantity in missing_items.items() %}
-          <article class="list-item" onclick="toggleCheck(this)">
+        {% for item in must_have %}
+        <article class="list-item" onclick="toggleCheck(this)">
             <div class="item-content">
-              <div class="checkbox-container">
-                <input type="checkbox" id="customCheckbox{{ loop.index }}" class="custom-checkbox" />
-                <label for="customCheckbox{{ loop.index }}" class="custom-checkbox-label"></label>
-              </div>
-              <p class="item-name">{{ item }}</p>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="customCheckbox{{ loop.index }}" class="custom-checkbox" />
+                    <label for="customCheckbox{{ loop.index }}" class="custom-checkbox-label"></label>
+                </div>
+                <p class="item-name">{{ item.name }}</p>
+                {% if item.alternative %}
+                <p class="alternative-name">↳ {{ item.alternative }}</p>
+                {% endif %}
             </div>
-            <span class="item-quantity">{{ quantity }}</span>
-          </article>
-          {% endfor %}
-                <h2 class="list-title">Nice Have Items</h2>
-                {% for item, quantity in nice_to_have.items() %}
-                <article class="list-item" onclick="toggleCheck(this)">
+            <span class="item-quantity">{{ item.quantity }}</span>
+        </article>
+        {% endfor %}
+
+        <h2 class="list-title">Nice to Have Items</h2>
+        {% for item in nice_to_have %}
+        <article class="list-item" onclick="toggleCheck(this)">
             <div class="item-content">
-              <div class="checkbox-container">
-                <input type="checkbox" id="customCheckboxSecond{{ loop.index }}" class="custom-checkbox" />
-                <label for="customCheckboxSecond{{ loop.index }}" class="custom-checkbox-label"></label>
-              </div>
-              <p class="item-name">{{ item }}</p>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="customCheckboxSecond{{ loop.index }}" class="custom-checkbox" />
+                    <label for="customCheckboxSecond{{ loop.index }}" class="custom-checkbox-label"></label>
+                </div>
+                <p class="item-name">{{ item.name }}</p>
+                {% if item.alternative %}
+                <p class="alternative-name">↳ {{ item.alternative }}</p>
+                {% endif %}
             </div>
-            <span class="item-quantity">{{ quantity }}</span>
-          </article>
-          {% endfor %}
+            <span class="item-quantity">{{ item.quantity }}</span>
+        </article>
+        {% endfor %}
     </main>
 
     <footer class="action-container">
         <button class="share-button" onclick="shareList()">Share List</button>
+        <button class="share-page-button" onclick="sharePage()">Share Page</button>
         <button class="rescan-button" onclick="rescan()">Rescan</button>
     </footer>
 </section>
 
 <script>
     function toggleCheck(element) {
-      // Prevent the label from toggling the checkbox again
-      const checkbox = element.querySelector('.custom-checkbox');
-      checkbox.checked = !checkbox.checked;
-      console.log(element);
+        // Prevent the label from toggling the checkbox again
+        const checkbox = element.querySelector('.custom-checkbox');
+        checkbox.checked = !checkbox.checked;
+        console.log(element);
     }
 
     function shareList() {
@@ -352,6 +324,24 @@
                 console.log('Shared successfully');
             }).catch(error => {
                 console.error('Error sharing:', error);
+            });
+        } else {
+            alert('Sharing is not supported on this browser');
+        }
+    }
+
+    function sharePage() {
+        const url = window.location.href;
+        const shareData = {
+            title: 'Grocery List',
+            url: url
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData).then(() => {
+                console.log('Page shared successfully');
+            }).catch(error => {
+                console.error('Error sharing the page:', error);
             });
         } else {
             alert('Sharing is not supported on this browser');
