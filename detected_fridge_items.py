@@ -90,9 +90,9 @@ def generate_list(image_paths, allergen_list, num_people):
 
     Special Instructions:
     Put all Items under "items" key and every item with key "name"
-    For each item that produces an allergen from this list: {allergen_list}, provide an appropriate alternative and add the alternative to the allergen item JSON string with a new key named alternative.
+    For each item that is produced using or is an allergen from this list: {allergen_list}, provide an appropriate alternative and add the alternative to the allergen item's JSON string with a new key named alternative.
     If you are unable to identify any item, return false for the key named success. If you successfully identified all items, return true for the key named success.
-    Remove any unknown food items.
+    Remove any 'unknown food' items.
     Combine the duplicate items into one field
     Tailor the list to accommodate the number of people: {num_people}.
     """
