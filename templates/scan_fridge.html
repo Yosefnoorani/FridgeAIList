@@ -12,7 +12,12 @@
             padding: 0;
             height: 100%;
             overflow: hidden;
+            width:100%;
         }
+        *,*::after,*::before{
+        box-sizing: border-box;
+        }
+
         .container {
             position: relative;
             text-align: center;
@@ -204,31 +209,47 @@
             cursor: pointer;
         }
         /* Loader CSS */
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-top: 16px solid #3498db;
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-            z-index: 1000;
-        }
+.loader-wrapper {
+position: absolute;
+    top: 0%;
+    left: 0%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity:0;
+    pointer-events:none;
+    transition:0.3s;
+}
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+.loader-wrapper.open{
+    opacity:1;
+    pointer-events:all;
+    }
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Existing HTML -->
-        <div class="loader" id="loader"></div>
+        <div class="loader-wrapper" id="loader"><div class="loader"></div></div>
         <video id="video" autoplay></video>
         <div class="overlay">
             <button class="switch-camera-button" id="switchCamera" aria-label="Switch Camera">
@@ -445,14 +466,14 @@
         }
 
         function showLoader() {
-            loader.style.display = 'block';
+            loader.classList.add('open');
             captureButton.disabled = true;
             uploadButton.disabled = true;
         }
 
         // Function to hide the loader and enable buttons
         function hideLoader() {
-            loader.style.display = 'none';
+            loader.classList.remove('open');
             captureButton.disabled = images.length >= 7; // Re-enable based on images count
             uploadButton.disabled = images.length < 4;  // Re-enable based on images count
         }

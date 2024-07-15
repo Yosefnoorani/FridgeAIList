@@ -95,7 +95,7 @@ def upload_file():
         # Pass image_paths, allergen_list, and num_people to generate_list
         print("allergen list: ", allergen_list)
         print("num_people: ", num_people)
-        response = generate_list(image_paths, allergen_list, num_people)
+        response = generate_list(image_paths, allergen_list, num_people, must_have | nice_to_have)
         response_data = json.loads(response)
         print(response_data)
 
@@ -153,6 +153,9 @@ def results():
             if item_name in scanned_items_dict and 'alternative' in scanned_items_dict[item_name]:
                 item_data['alternative'] = scanned_items_dict[item_name]['alternative']
             nice_to_have_items.append(item_data)
+
+    print("Must Have Items:", must_have_items)
+    print("Nice to Have Items:", nice_to_have_items)
 
     return render_template('results.html', must_have=must_have_items, nice_to_have=nice_to_have_items)
 

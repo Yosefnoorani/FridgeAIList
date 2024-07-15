@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="final 12/07">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="fix the prompt for allergy v1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/detected_fridge_items.py" beforeDir="false" afterPath="$PROJECT_DIR$/detected_fridge_items.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/results.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/results.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/scan_fridge.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/scan_fridge.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/setup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/setup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -488,7 +494,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1720734993947</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL‎-00047" summary="fix the prompt for allergy v1">
+      <option name="closed" value="true" />
+      <created>1720907017170</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL‎-00047" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1720907017170</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -503,7 +517,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add free text input to the drawers of groceries" />
     <MESSAGE value="add free text input to the drawers of groceries v1" />
     <MESSAGE value="add a tag numbers" />
     <MESSAGE value="add move on all data v1" />
@@ -528,9 +541,19 @@
     <MESSAGE value="start 09/07" />
     <MESSAGE value="redesign to result and fix design for scan" />
     <MESSAGE value="final 12/07" />
-    <option name="LAST_COMMIT_MESSAGE" value="final 12/07" />
+    <MESSAGE value="fix the prompt for allergy v1" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix the prompt for allergy v1" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/detected_fridge_items.py</url>
+          <line>187</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="response_data['inventory'][3]" />

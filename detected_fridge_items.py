@@ -8,7 +8,7 @@ import mimetypes
 from dotenv import load_dotenv
 import inflect
 
-p = inflect.engine()
+pinflect = inflect.engine()
 
 
 def get_secret_cloud(secret_id, project_id="fridgelist-426921", version_id="latest"):
@@ -39,9 +39,9 @@ def get_secret():
 
 
 
-def generate_list(image_paths, allergen_list, num_people):
+def generate_list(image_paths, allergen_list, num_people, user_lists):
 
-
+    print("user list :", user_lists)
     secret_key = get_secret()
 
 
@@ -74,32 +74,25 @@ def generate_list(image_paths, allergen_list, num_people):
 
     # allergen_list_str = ', '.join(f'"{allergen}"' for allergen in allergen_list)
 
-    string_template  = """
-    Please analyze the attached photos of the refrigerator contents. Your task is to identify the products visible in each image and provide a detailed list, including their approximate quantities.
-
-    Requirements:
-
-    For each product, provide:
-    Name
-    Quantity (number only)
-
-    Summarize the information across all images to create an accurate inventory of the refrigerator's contents.
+    content  = f"""
+ Please analyze the attached photos of the refrigerator contents. Identify the products visible in each image and provide a detailed list, including their quantities. 
+    Attach to the list the following list: {user_lists} with the quantity for each item.
+    For each product, provide: Name, Quantity (number only)
+    Summarize the information across all images and from the list to create an accurate inventory of the refrigerator's contents.
     Do not classify items by shelf or drawer.
+    Based on the fact that I am allergic to these products:{allergen_list} please provide me with alternatives: For each item that is produced using or is an allergen from this list: {allergen_list}, provide an appropriate alternative and add the alternative to the allergen item's JSON string with a new key named alternative.
     Remove duplicate items.
     Return the results in JSON format.
-
-    Special Instructions:
-    Put all Items under "items" key and every item with key "name"
-    For each item that is produced using or is an allergen from this list: {allergen_list}, provide an appropriate alternative and add the alternative to the allergen item's JSON string with a new key named alternative.
+    Put all items under the "items" key and every item with key "name".
     If you are unable to identify any item, return false for the key named success. If you successfully identified all items, return true for the key named success.
     Remove any 'unknown food' items.
-    Combine the duplicate items into one field
+    Combine the duplicate items into one field.
     Tailor the list to accommodate the number of people: {num_people}.
     """
 
 
 
-    content = string_template.format(allergen_list=allergen_list, num_people=num_people)
+    #content = string_template.format(allergen_list=allergen_list, num_people=num_people, user_lists=user_lists)
 
 
     parts = [{'text': content}] + [{'inline_data': image} for image in images]
@@ -108,6 +101,48 @@ def generate_list(image_paths, allergen_list, num_people):
         response = model.generate_content({'parts': parts}, stream=True)
         # print(response)
         response.resolve()
+    except Exception as e:
+        print(f"Error generating content: {e}")
+        return json.dumps({"success": False, "data": f"Error generating content: {e}"})
+
+    # print(response.text)
+    jsonResult = validate_json(response)
+    return jsonResult
+
+
+def allergies_insight(items_list, allergen_list):
+
+
+    secret_key = get_secret()
+
+
+    genai.configure(api_key=secret_key)
+    model = genai.GenerativeModel('gemini-1.5-flash')
+
+
+    # allergen_list_str = ', '.join(f'"{allergen}"' for allergen in allergen_list)
+
+    string_template  = """
+    For this items:{items_list}
+    Requirements:
+
+    For each product, provide:
+    
+    Return the results in JSON format.
+
+    Special Instructions:
+    Put all Items under "items" key and every item with key "name"
+    For each item that is produced using or is an allergen from this list: {allergen_list}, provide an appropriate alternative and add the alternative to the allergen item's JSON string with a new key named alternative.
+    """
+
+    content = string_template.format(allergen_list=allergen_list, items_list=items_list)
+
+    try:
+        response = model.generate_content([
+            content], stream=True)
+        response.resolve()
+        print(model.count_tokens(response.text))
+        print(response.text)
     except Exception as e:
         print(f"Error generating content: {e}")
         return json.dumps({"success": False, "data": f"Error generating content: {e}"})
@@ -144,7 +179,7 @@ def validate_json(response):
 
 
 def singularize(name):
-    return p.singular_noun(name) if p.singular_noun(name) else name
+    return pinflect.singular_noun(name) if pinflect.singular_noun(name) else name
 
 
 def get_missing_items(scanned_items, must_have, nice_to_have):
@@ -152,6 +187,7 @@ def get_missing_items(scanned_items, must_have, nice_to_have):
     nice_to_have_changes = {}
     scanned_items_dict = {singularize(item['name'].lower()): item['quantity'] for item in scanned_items}
 
+    # Process must_have items
     for item, quantity in must_have.items():
         sanitized_quantity = sanitize_quantity(quantity)
         item_singular = singularize(item.lower())
@@ -160,36 +196,19 @@ def get_missing_items(scanned_items, must_have, nice_to_have):
         if remaining_quantity > 0:
             missing_items[item_singular] = remaining_quantity
 
+    # Process nice_to_have items
     for item, quantity in nice_to_have.items():
         sanitized_quantity = sanitize_quantity(quantity)
         item_singular = singularize(item.lower())
         scanned_quantity = scanned_items_dict.get(item_singular, 0)
-        if sanitized_quantity > scanned_quantity:
-            nice_to_have_changes[item_singular] = sanitized_quantity - scanned_quantity
+        remaining_quantity = sanitized_quantity - scanned_quantity
+        if remaining_quantity > 0:
+            nice_to_have_changes[item_singular] = remaining_quantity
 
-        # missing_items = """
-        # {
-        #     "success": true,
-        #     "items": [
-        #         {"name": "Milk", "quantity": 3, "alternative": "Soy Milk"}
-        #         {"name": "aaaa2", "quantity": 2}
-        #         {"name": "bread", "quantity": 1, "alternative": "bbbb"}
-        #     ]
-        # }
-        # """
-        #
-        # nice_to_have_changes = """
-        # {
-        #     "success": true,
-        #     "items": [
-        #         {"name": "sugar", "quantity": 1}
-        #         {"name": "Nutella", "quantity": 1, "alternative": "Chocolate Hashahar"}
-        #         {"name": "Soda", "quantity": 1}
-        #     ]
-        # }
-        # """
+    print("Nice to Have Items:", nice_to_have_changes)
 
     return missing_items, nice_to_have_changes
+
 
 
 def sanitize_quantity(quantity):
@@ -210,14 +229,19 @@ if __name__ == '__main__':
 
     # prt = generate_list(image_paths=r"C:\Users\yosef\Downloads\fridgeCompie2.jpg")
 
+    items_list = ["bread", "eggs", "yogurt", "chocolate spread", "water", "milk", "mayonnaise"]
+    allergen_list= ["Milk", "egg", "wheat"]
 
-    prt = generate_list(image_paths=[r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-49.jpg",
-                                r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-44.jpg",
-                                r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-39.jpg",
-                                r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-34.jpg",
-                                r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-28.jpg",
-                                r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-23.jpg",
-                                r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-15.jpg"])
+
+    prt = allergies_insight(items_list,allergen_list)
+
+    # prt = generate_list(image_paths=[r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-49.jpg",
+    #                             r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-44.jpg",
+    #                             r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-39.jpg",
+    #                             r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-34.jpg",
+    #                             r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-28.jpg",
+    #                             r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-23.jpg",
+    #                             r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-15.jpg"])
 
 
     # print(prt)
