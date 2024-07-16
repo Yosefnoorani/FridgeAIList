@@ -95,7 +95,7 @@ def upload_file():
         # Pass image_paths, allergen_list, and num_people to generate_list
         print("allergen list: ", allergen_list)
         print("num_people: ", num_people)
-        response = generate_list(image_paths, allergen_list, num_people, must_have | nice_to_have)
+        response = generate_list(image_paths, allergen_list, num_people)
         response_data = json.loads(response)
         print(response_data)
 

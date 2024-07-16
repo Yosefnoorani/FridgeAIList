@@ -39,9 +39,9 @@ def get_secret():
 
 
 
-def generate_list(image_paths, allergen_list, num_people, user_lists):
+def generate_list(image_paths, allergen_list, num_people):
 
-    print("user list :", user_lists)
+    #print("user list :", user_lists)
     secret_key = get_secret()
 
 
@@ -75,8 +75,7 @@ def generate_list(image_paths, allergen_list, num_people, user_lists):
     # allergen_list_str = ', '.join(f'"{allergen}"' for allergen in allergen_list)
 
     content  = f"""
- Please analyze the attached photos of the refrigerator contents. Identify the products visible in each image and provide a detailed list, including their quantities. 
-    Attach to the list the following list: {user_lists} with the quantity for each item.
+    Please analyze the attached photos of the refrigerator contents. Identify the products visible in each image and provide a detailed list, including their quantities. 
     For each product, provide: Name, Quantity (number only)
     Summarize the information across all images and from the list to create an accurate inventory of the refrigerator's contents.
     Do not classify items by shelf or drawer.
@@ -106,11 +105,12 @@ def generate_list(image_paths, allergen_list, num_people, user_lists):
         return json.dumps({"success": False, "data": f"Error generating content: {e}"})
 
     # print(response.text)
+    print(model.count_tokens(response.text))
     jsonResult = validate_json(response)
     return jsonResult
 
 
-def allergies_insight(items_list, allergen_list):
+def allergies_insight(must_list, nice_list, allergen_list):
 
 
     secret_key = get_secret()
@@ -122,20 +122,16 @@ def allergies_insight(items_list, allergen_list):
 
     # allergen_list_str = ', '.join(f'"{allergen}"' for allergen in allergen_list)
 
-    string_template  = """
-    For this items:{items_list}
+    content  = f"""
+    For this items: must: {must_list} and nice: {nice_list}
     Requirements:
-
-    For each product, provide:
-    
-    Return the results in JSON format.
-
-    Special Instructions:
-    Put all Items under "items" key and every item with key "name"
     For each item that is produced using or is an allergen from this list: {allergen_list}, provide an appropriate alternative and add the alternative to the allergen item's JSON string with a new key named alternative.
+    Return the results in JSON format.
+    Put all Items from the must list item under "must" key and nice list under "nice" key
+    For every item with key "name"    
     """
 
-    content = string_template.format(allergen_list=allergen_list, items_list=items_list)
+    #content = string_template.format(allergen_list=allergen_list, items_list=items_list)
 
     try:
         response = model.generate_content([
@@ -229,11 +225,12 @@ if __name__ == '__main__':
 
     # prt = generate_list(image_paths=r"C:\Users\yosef\Downloads\fridgeCompie2.jpg")
 
-    items_list = ["bread", "eggs", "yogurt", "chocolate spread", "water", "milk", "mayonnaise"]
+    must_list = ["bread", "eggs", "yogurt", "chocolate spread"]
+    nice_list = ["water", "milk", "mayonnaise"]
     allergen_list= ["Milk", "egg", "wheat"]
 
 
-    prt = allergies_insight(items_list,allergen_list)
+    prt = allergies_insight(must_list, nice_list, allergen_list)
 
     # prt = generate_list(image_paths=[r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-49.jpg",
     #                             r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-44.jpg",
