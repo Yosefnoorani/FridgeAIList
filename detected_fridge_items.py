@@ -107,6 +107,7 @@ def generate_list(image_paths, allergen_list, num_people):
     # print(response.text)
     print(model.count_tokens(response.text))
     jsonResult = validate_json(response)
+    # print(f"validate_json result: {jsonResult}")
     return jsonResult
 
 
@@ -123,22 +124,25 @@ def allergies_insight(must_list, nice_list, allergen_list):
     # allergen_list_str = ', '.join(f'"{allergen}"' for allergen in allergen_list)
 
     content  = f"""
-    For this items: must: {must_list} and nice: {nice_list}
+    For these items: must: {must_list} and nice: {nice_list}
     Requirements:
     For each item that is produced using or is an allergen from this list: {allergen_list}, provide an appropriate alternative and add the alternative to the allergen item's JSON string with a new key named alternative.
-    Return the results in JSON format.
-    Put all Items from the must list item under "must" key and nice list under "nice" key
-    For every item with key "name"    
+    Return the results in JSON format
+    If you are unable to identify any item, return false for the key named success. If you successfully identified all items, return true for the key named success.
+    Put all items from the must list item under "must" key and nice list under "nice" key.
+    For every item with key "name" 
+     
+    one named "must" and the other named "nice" and each has a key for each product named 
+    "name" with the quantity in qauntity and an "alternative" field
+    Do not show "alternative" if is equal to null
     """
-
-    #content = string_template.format(allergen_list=allergen_list, items_list=items_list)
 
     try:
         response = model.generate_content([
             content], stream=True)
         response.resolve()
         print(model.count_tokens(response.text))
-        print(response.text)
+        # print(response.text)
     except Exception as e:
         print(f"Error generating content: {e}")
         return json.dumps({"success": False, "data": f"Error generating content: {e}"})
@@ -151,18 +155,15 @@ def allergies_insight(must_list, nice_list, allergen_list):
 def validate_json(response):
     if response.candidates[0].finish_reason == 1:
         result = response.text
-
-        # Strip out non-JSON parts
         result = result[result.find('{'):result.rfind('}') + 1]
-
         try:
             parsed_data = json.loads(result)
+            # print(f"Parsed JSON data: {parsed_data}")
         except json.JSONDecodeError as e:
-            print("JSON Decode Error:", e)
+            print(f"JSON Decode Error: {e}")
             return json.dumps({"success": False, "data": "Invalid JSON response"})
 
         updated_json = json.dumps(parsed_data)
-        # print(updated_json)
         return updated_json
     else:
         updated_data = {
@@ -170,7 +171,6 @@ def validate_json(response):
             "data": str(response.candidates[0].safety_ratings)
         }
         updated_json = json.dumps(updated_data)
-        # print(updated_json)
         return updated_json
 
 
@@ -178,32 +178,44 @@ def singularize(name):
     return pinflect.singular_noun(name) if pinflect.singular_noun(name) else name
 
 
-def get_missing_items(scanned_items, must_have, nice_to_have):
-    missing_items = {}
-    nice_to_have_changes = {}
+def get_missing_items(scanned_items, must_nice_allergy_list):
+    # print(f"scanned_items: {scanned_items} - type: {type(scanned_items)}")
+    # print(f"must_nice_allergy_list: {must_nice_allergy_list} - type: {type(must_nice_allergy_list)}")
+
+    must_nice_allergy_list = json.loads(must_nice_allergy_list)
+
+    missing_items = {'must': [], 'nice': []}
+    must_have = must_nice_allergy_list.get('must', [])
+    nice_to_have = must_nice_allergy_list.get('nice', [])
     scanned_items_dict = {singularize(item['name'].lower()): item['quantity'] for item in scanned_items}
 
     # Process must_have items
-    for item, quantity in must_have.items():
-        sanitized_quantity = sanitize_quantity(quantity)
-        item_singular = singularize(item.lower())
-        scanned_quantity = scanned_items_dict.get(item_singular, 0)
-        remaining_quantity = sanitized_quantity - scanned_quantity
+    for item in must_have:
+        item_name = singularize(item['name'].lower())
+        required_quantity = sanitize_quantity(item['quantity'])
+        scanned_quantity = scanned_items_dict.get(item_name, 0)
+        remaining_quantity = required_quantity - scanned_quantity
         if remaining_quantity > 0:
-            missing_items[item_singular] = remaining_quantity
+            missing_item = {'name': item['name'], 'quantity': remaining_quantity}
+            if item.get('alternative'):
+                missing_item['alternative'] = item['alternative']
+            missing_items['must'].append(missing_item)
 
     # Process nice_to_have items
-    for item, quantity in nice_to_have.items():
-        sanitized_quantity = sanitize_quantity(quantity)
-        item_singular = singularize(item.lower())
-        scanned_quantity = scanned_items_dict.get(item_singular, 0)
-        remaining_quantity = sanitized_quantity - scanned_quantity
+    for item in nice_to_have:
+        item_name = singularize(item['name'].lower())
+        required_quantity = sanitize_quantity(item['quantity'])
+        scanned_quantity = scanned_items_dict.get(item_name, 0)
+        remaining_quantity = required_quantity - scanned_quantity
         if remaining_quantity > 0:
-            nice_to_have_changes[item_singular] = remaining_quantity
+            missing_item = {'name': item['name'], 'quantity': remaining_quantity}
+            if item.get('alternative'):
+                missing_item['alternative'] = item['alternative']
+            missing_items['nice'].append(missing_item)
 
-    print("Nice to Have Items:", nice_to_have_changes)
+    print(f"Calculated missing_items: {missing_items}")
+    return missing_items
 
-    return missing_items, nice_to_have_changes
 
 
 
@@ -241,50 +253,7 @@ if __name__ == '__main__':
     #                             r"C:\Users\yosef\Downloads\fridges images\photo_2024-06-21_00-03-15.jpg"])
 
 
-    # print(prt)
-
-
-
-# def check_image(image_data):
-#     try:
-#         # Try to open the image to see if it is valid
-#         image = Image.open(io.BytesIO(image_data))
-#         image.verify()
-#         return True
-#     except Exception as e:
-#         print(f"Invalid image: {e}")
-#         return False
-
-#
-#
-# @app.route('/generate', methods=['POST'])
-# def generate_from_image():
-#     if 'image' not in request.files:
-#         return jsonify({'error': 'No image provided'})
-#
-#     print("Start request")
-#     image = request.files['file']
-#     # print(image)
-#     if image.filename == '':
-#         return jsonify({'error': 'No selected image file'})
-#
-#     # Save the image to a temporary location
-#     temp_image_path = 'temp_image.jpg'
-#     image.save(temp_image_path)
-#
-#     # Generate content from the image
-#     generated_text = generate_content(temp_image_path)
-#     # generated_text = generate_content(image)
-#     # print(generated_text)
-#     os.remove(temp_image_path)
-#
-#
-#
-#     print("End response")
-#     # print(generated_text)
-#     return generated_text
 
 
 
 
-#     google_api_key = "AIzaSyDra4rh0oD4P3PcpiRYEyFy6dl1mywTaEI"

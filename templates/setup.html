@@ -386,10 +386,48 @@
             border-radius: 4px;
             margin-right: 8px;
         }
+        .loader-wrapper {
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .loader-wrapper.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
     </style>
 </head>
 <body>
 <div class="container">
+    <div class="loader-wrapper" id="loader">
+        <div class="loader"></div>
+    </div>
     <div class="section">
         <div class="header">Let’s Begin</div>
         <div class="subheader">Lorem ipsum dolor sit amet</div>
@@ -814,10 +852,8 @@
         closeDrawer(`${type}-drawer`);
     }
 
-    function submitForm() {
+    async function submitForm() {
         const people = document.getElementById('people-value').textContent;
-        //const budget = document.getElementById('budget-value').textContent.replace('$', '');
-
         const allergies = Array.from(document.querySelectorAll('#allergies-tags .tag')).map(tag => tag.textContent);
 
         const mustHaveItems = {};
@@ -865,7 +901,6 @@
 
         const data = {
             family_size: people,
-            //budget: budget,
             allergies: allergies,
             must_have: mustHaveItems,
             nice_to_have: niceToHaveItems
@@ -873,22 +908,35 @@
 
         console.log('Data to be sent:', data);
 
-        fetch('{{ url_for('setup') }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(response => {
+        // Show loader
+        const loader = document.getElementById('loader');
+        loader.classList.add('open');
+
+        try {
+            const response = await fetch('{{ url_for('setup') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            // Handle response
             if (response.redirected) {
                 window.location.href = response.url;
             } else {
-                response.json().then(data => {
-                    console.error('Form submission failed:', data);
-                });
+                const responseData = await response.json();
+                console.error('Form submission failed:', responseData);
             }
-        }).catch(error => console.error('Error:', error));
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            // Hide loader
+            loader.classList.remove('open');
+        }
     }
+
+
 </script>
 </body>
 </html>

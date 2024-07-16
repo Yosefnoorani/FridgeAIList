@@ -262,7 +262,7 @@
 
     <main class="list-container">
         <h2 class="list-title">Must Have Items</h2>
-        {% for item in must_have %}
+        {% for item in missing_items.must %}
         <article class="list-item" onclick="toggleCheck(this)">
             <div class="item-content">
                 <div class="checkbox-container">
@@ -279,7 +279,7 @@
         {% endfor %}
 
         <h2 class="list-title">Nice to Have Items</h2>
-        {% for item in nice_to_have %}
+        {% for item in missing_items.nice %}
         <article class="list-item" onclick="toggleCheck(this)">
             <div class="item-content">
                 <div class="checkbox-container">

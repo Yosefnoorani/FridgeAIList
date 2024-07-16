@@ -209,40 +209,40 @@
             cursor: pointer;
         }
         /* Loader CSS */
-.loader-wrapper {
-position: absolute;
-    top: 0%;
-    left: 0%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity:0;
-    pointer-events:none;
-    transition:0.3s;
-}
+        .loader-wrapper {
+        position: absolute;
+            top: 0%;
+            left: 0%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity:0;
+            pointer-events:none;
+            transition:0.3s;
+        }
 
-.loader-wrapper.open{
-    opacity:1;
-    pointer-events:all;
-    }
+        .loader-wrapper.open{
+            opacity:1;
+            pointer-events:all;
+            }
 
-.loader {
-    border: 16px solid #f3f3f3;
-    border-top: 16px solid #3498db;
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    animation: spin 2s linear infinite;
-}
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
     </style>
 </head>
@@ -283,8 +283,7 @@ position: absolute;
         </div>
         <form id="uploadForm" action="{{ url_for('upload_file') }}" method="post" style="display: none;">
             <input type="hidden" name="images" id="imageData">
-            <input type="hidden" name="must_have" id="mustHaveData">
-            <input type="hidden" name="nice_to_have" id="niceToHaveData">
+            <input type="hidden" name="must_nice_allergy_list" id="mustNiceAllergyList" value="{{ must_nice_allergy_list | tojson | safe }}">
         </form>
     </div>
     <div id="errorPopup" class="error-popup">
@@ -292,12 +291,9 @@ position: absolute;
         <button onclick="closeErrorPopup()">Close</button>
     </div>
     <script>
-        // Assuming must_have and nice_to_have are defined as JavaScript objects
-        const must_have = {{ must_have | tojson | safe }} || {};
-        const nice_to_have = {{ nice_to_have | tojson | safe }} || {};
+        const mustNiceAllergyList = {{ must_nice_allergy_list | tojson | safe }} || {};
 
-        document.getElementById('mustHaveData').value = JSON.stringify(must_have);
-        document.getElementById('niceToHaveData').value = JSON.stringify(nice_to_have);
+        document.getElementById('mustNiceAllergyList').value = JSON.stringify(mustNiceAllergyList);
 
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
