@@ -62,7 +62,7 @@
             width: 40px;
             height: 40px;
             padding: 4px;
-            cursor: pointer; /* Add cursor pointer */
+            cursor: pointer;
         }
 
         .avatar-wrapper {
@@ -107,6 +107,16 @@
             align-items: center;
             border-radius: 16px;
             margin-bottom: 7px;
+            user-select: none; /* Prevent text selection during drag */
+        }
+
+        .list-item.dragging {
+            opacity: 0.5; /* Style while dragging */
+        }
+
+        .list-item.placeholder {
+            background-color: rgba(255, 255, 255, 0.1); /* Placeholder style */
+            border: 2px dashed #69fff1;
         }
 
         .item-content {
@@ -142,7 +152,6 @@
         }
 
         .alternative-name {
-            /*color: #69fff1;*/
             font-size: 20px;
         }
 
@@ -269,10 +278,10 @@
         <p class="subtitle">Review what's missing</p>
     </header>
 
-    <main class="list-container">
+    <main class="list-container" id="listContainer">
         <h2 class="list-title">Must Have Items</h2>
         {% for item in missing_items.must %}
-        <article class="list-item" onclick="toggleCheck(this)">
+        <article class="list-item" draggable="true" onclick="toggleCheck(this)" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="drop(event)" ondragend="dragEnd(event)" ontouchstart="touchStart(event)" ontouchmove="touchMove(event)" ontouchend="touchEnd(event)">
             <div class="item-content">
                 <div class="checkbox-container">
                     <input type="checkbox" id="customCheckbox{{ loop.index }}" class="custom-checkbox" />
@@ -294,7 +303,7 @@
 
         <h2 class="list-title">Nice to Have Items</h2>
         {% for item in missing_items.nice %}
-        <article class="list-item" onclick="toggleCheck(this)">
+        <article class="list-item" draggable="true" onclick="toggleCheck(this)" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="drop(event)" ondragend="dragEnd(event)" ontouchstart="touchStart(event)" ontouchmove="touchMove(event)" ontouchend="touchEnd(event)">
             <div class="item-content">
                 <div class="checkbox-container">
                     <input type="checkbox" id="customCheckboxSecond{{ loop.index }}" class="custom-checkbox" />
@@ -323,6 +332,71 @@
 </section>
 
 <script>
+    let draggedItem = null;
+    let placeholder = null;
+
+    function dragStart(event) {
+        draggedItem = event.target;
+        event.target.classList.add('dragging');
+        placeholder = document.createElement('div');
+        placeholder.className = 'list-item placeholder';
+        placeholder.style.height = `${event.target.offsetHeight}px`;
+    }
+
+    function dragOver(event) {
+        event.preventDefault();
+        const container = document.getElementById('listContainer');
+        const afterElement = getDragAfterElement(container, event.clientY);
+        if (afterElement == null) {
+            container.appendChild(placeholder);
+        } else {
+            container.insertBefore(placeholder, afterElement);
+        }
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const container = document.getElementById('listContainer');
+        container.insertBefore(draggedItem, placeholder);
+        placeholder.remove();
+    }
+
+    function dragEnd(event) {
+        event.target.classList.remove('dragging');
+        placeholder.remove();
+        draggedItem = null;
+        placeholder = null;
+    }
+
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.list-item:not(.dragging)')];
+
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    function touchStart(event) {
+        const touch = event.touches[0];
+        dragStart({ target: event.target, clientY: touch.clientY });
+    }
+
+    function touchMove(event) {
+        const touch = event.touches[0];
+        dragOver({ preventDefault: event.preventDefault, clientY: touch.clientY });
+    }
+
+    function touchEnd(event) {
+        drop({ preventDefault: event.preventDefault });
+        dragEnd({ target: draggedItem });
+    }
+
     function toggleCheck(element) {
         const checkbox = element.querySelector('.custom-checkbox');
         checkbox.checked = !checkbox.checked;

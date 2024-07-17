@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="must_nice_allergy_list">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="redesign result 17/07">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/results.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/results.html" afterDir="false" />
     </list>
@@ -119,14 +119,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1718525984733</updated>
-    </task>
-    <task id="LOCAL‎-00002" summary="add new design to setup (without drawer)">
-      <option name="closed" value="true" />
-      <created>1718742160984</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL‎-00002" />
-      <option name="project" value="LOCAL‎" />
-      <updated>1718742160984</updated>
     </task>
     <task id="LOCAL‎-00003" summary="add new design to setup (with drawer of allergy)">
       <option name="closed" value="true" />
@@ -512,7 +504,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1721162735354</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL‎-00051" summary="redesign result 17/07">
+      <option name="closed" value="true" />
+      <created>1721207111264</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL‎-00051" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1721207111264</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -527,7 +527,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add move on all data v2" />
     <MESSAGE value="using json" />
     <MESSAGE value="adding result design v1" />
     <MESSAGE value="fix camera switch v1" />
@@ -552,7 +551,8 @@
     <MESSAGE value="final 15/07" />
     <MESSAGE value="start 16/07" />
     <MESSAGE value="must_nice_allergy_list" />
-    <option name="LAST_COMMIT_MESSAGE" value="must_nice_allergy_list" />
+    <MESSAGE value="redesign result 17/07" />
+    <option name="LAST_COMMIT_MESSAGE" value="redesign result 17/07" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
