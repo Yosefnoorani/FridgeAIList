@@ -105,7 +105,7 @@
             padding: 0px 16px;
             cursor: pointer;
             align-items: center;
-            border-radius: 50px;
+            border-radius: 16px;
             margin-bottom: 7px;
         }
 
@@ -142,8 +142,17 @@
         }
 
         .alternative-name {
-            color: #69fff1;
-            font-size: 14px;
+            /*color: #69fff1;*/
+            font-size: 20px;
+        }
+
+        .allergy-title {
+            color: #ff8796;
+        }
+
+        .allergy-subtitle {
+            color: #ff8796;
+            font-size: 12px;
         }
 
         .action-container {
@@ -269,9 +278,14 @@
                     <input type="checkbox" id="customCheckbox{{ loop.index }}" class="custom-checkbox" />
                     <label for="customCheckbox{{ loop.index }}" class="custom-checkbox-label"></label>
                 </div>
-                <p class="item-name">{{ item.name }}</p>
                 {% if item.alternative %}
-                <p class="alternative-name">↳ {{ item.alternative }}</p>
+                <div>
+                    <p class="item-name allergy-title">{{ item.name }}</p>
+                    <p class="allergy-subtitle">Allergy - Alternative found</p>
+                    <p class="alternative-name">↳ {{ item.alternative }}</p>
+                </div>
+                {% else %}
+                <p class="item-name">{{ item.name }}</p>
                 {% endif %}
             </div>
             <span class="item-quantity">{{ item.quantity }}</span>
@@ -286,9 +300,14 @@
                     <input type="checkbox" id="customCheckboxSecond{{ loop.index }}" class="custom-checkbox" />
                     <label for="customCheckboxSecond{{ loop.index }}" class="custom-checkbox-label"></label>
                 </div>
-                <p class="item-name">{{ item.name }}</p>
                 {% if item.alternative %}
-                <p class="alternative-name">↳ {{ item.alternative }}</p>
+                <div>
+                    <p class="item-name allergy-title">{{ item.name }}</p>
+                    <p class="allergy-subtitle">Allergy - Alternative found</p>
+                    <p class="alternative-name">↳ {{ item.alternative }}</p>
+                </div>
+                {% else %}
+                <p class="item-name">{{ item.name }}</p>
                 {% endif %}
             </div>
             <span class="item-quantity">{{ item.quantity }}</span>
@@ -305,15 +324,22 @@
 
 <script>
     function toggleCheck(element) {
-        // Prevent the label from toggling the checkbox again
         const checkbox = element.querySelector('.custom-checkbox');
         checkbox.checked = !checkbox.checked;
-        //console.log(element);
+        if (checkbox.checked) {
+            element.style.borderColor = '#69fff1'; // Change border color when checked
+        } else {
+            element.style.borderColor = 'rgba(255, 255, 255, 0.24)'; // Reset border color when unchecked
+        }
     }
 
     function shareList() {
-        const listItems = document.querySelectorAll('.list-item .item-name');
-        const items = Array.from(listItems).map(item => item.textContent);
+        const listItems = document.querySelectorAll('.list-item');
+        const items = Array.from(listItems).map(item => {
+            const itemName = item.querySelector('.item-name').textContent;
+            const itemQuantity = item.querySelector('.item-quantity').textContent;
+            return `${itemName}: ${itemQuantity}`;
+        });
         const shareData = {
             title: 'Grocery List',
             text: `Missing items:\n${items.join('\n')}`
