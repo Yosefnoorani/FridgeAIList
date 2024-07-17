@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="redesign result 17/07">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="test drag and drop results.html">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/camera-switch-icon.svg" beforeDir="false" afterPath="$PROJECT_DIR$/static/camera-switch-icon.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/upload-icon.svg" beforeDir="false" afterPath="$PROJECT_DIR$/static/upload-icon.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/results.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/results.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -16,8 +18,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -119,14 +121,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1718525984733</updated>
-    </task>
-    <task id="LOCAL‎-00003" summary="add new design to setup (with drawer of allergy)">
-      <option name="closed" value="true" />
-      <created>1718826408307</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL‎-00003" />
-      <option name="project" value="LOCAL‎" />
-      <updated>1718826408307</updated>
     </task>
     <task id="LOCAL‎-00004" summary="add new design to setup added the drawer without the funcationaly">
       <option name="closed" value="true" />
@@ -512,7 +506,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1721207111264</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL‎-00052" summary="test drag and drop results.html">
+      <option name="closed" value="true" />
+      <created>1721248874751</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL‎-00052" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1721248874753</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -527,7 +529,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="using json" />
     <MESSAGE value="adding result design v1" />
     <MESSAGE value="fix camera switch v1" />
     <MESSAGE value="fix the black button" />
@@ -552,7 +553,8 @@
     <MESSAGE value="start 16/07" />
     <MESSAGE value="must_nice_allergy_list" />
     <MESSAGE value="redesign result 17/07" />
-    <option name="LAST_COMMIT_MESSAGE" value="redesign result 17/07" />
+    <MESSAGE value="test drag and drop results.html" />
+    <option name="LAST_COMMIT_MESSAGE" value="test drag and drop results.html" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -278,50 +278,54 @@
         <p class="subtitle">Review what's missing</p>
     </header>
 
-    <main class="list-container" id="listContainer">
+    <main class="list-container">
         <h2 class="list-title">Must Have Items</h2>
-        {% for item in missing_items.must %}
-        <article class="list-item" draggable="true" onclick="toggleCheck(this)" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="drop(event)" ondragend="dragEnd(event)" ontouchstart="touchStart(event)" ontouchmove="touchMove(event)" ontouchend="touchEnd(event)">
-            <div class="item-content">
-                <div class="checkbox-container">
-                    <input type="checkbox" id="customCheckbox{{ loop.index }}" class="custom-checkbox" />
-                    <label for="customCheckbox{{ loop.index }}" class="custom-checkbox-label"></label>
+        <div id="mustHaveContainer">
+            {% for item in missing_items.must %}
+            <article class="list-item" onclick="toggleCheck(this)" draggable="true">
+                <div class="item-content">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="customCheckbox{{ loop.index }}" class="custom-checkbox" />
+                        <label for="customCheckbox{{ loop.index }}" class="custom-checkbox-label"></label>
+                    </div>
+                    {% if item.alternative %}
+                    <div>
+                        <p class="item-name allergy-title">{{ item.name }}</p>
+                        <p class="allergy-subtitle">Allergy - Alternative found</p>
+                        <p class="alternative-name">↳ {{ item.alternative }}</p>
+                    </div>
+                    {% else %}
+                    <p class="item-name">{{ item.name }}</p>
+                    {% endif %}
                 </div>
-                {% if item.alternative %}
-                <div>
-                    <p class="item-name allergy-title">{{ item.name }}</p>
-                    <p class="allergy-subtitle">Allergy - Alternative found</p>
-                    <p class="alternative-name">↳ {{ item.alternative }}</p>
-                </div>
-                {% else %}
-                <p class="item-name">{{ item.name }}</p>
-                {% endif %}
-            </div>
-            <span class="item-quantity">{{ item.quantity }}</span>
-        </article>
-        {% endfor %}
+                <span class="item-quantity">{{ item.quantity }}</span>
+            </article>
+            {% endfor %}
+        </div>
 
         <h2 class="list-title">Nice to Have Items</h2>
-        {% for item in missing_items.nice %}
-        <article class="list-item" draggable="true" onclick="toggleCheck(this)" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="drop(event)" ondragend="dragEnd(event)" ontouchstart="touchStart(event)" ontouchmove="touchMove(event)" ontouchend="touchEnd(event)">
-            <div class="item-content">
-                <div class="checkbox-container">
-                    <input type="checkbox" id="customCheckboxSecond{{ loop.index }}" class="custom-checkbox" />
-                    <label for="customCheckboxSecond{{ loop.index }}" class="custom-checkbox-label"></label>
+        <div id="niceToHaveContainer">
+            {% for item in missing_items.nice %}
+            <article class="list-item" onclick="toggleCheck(this)" draggable="true">
+                <div class="item-content">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="customCheckboxSecond{{ loop.index }}" class="custom-checkbox" />
+                        <label for="customCheckboxSecond{{ loop.index }}" class="custom-checkbox-label"></label>
+                    </div>
+                    {% if item.alternative %}
+                    <div>
+                        <p class="item-name allergy-title">{{ item.name }}</p>
+                        <p class="allergy-subtitle">Allergy - Alternative found</p>
+                        <p class="alternative-name">↳ {{ item.alternative }}</p>
+                    </div>
+                    {% else %}
+                    <p class="item-name">{{ item.name }}</p>
+                    {% endif %}
                 </div>
-                {% if item.alternative %}
-                <div>
-                    <p class="item-name allergy-title">{{ item.name }}</p>
-                    <p class="allergy-subtitle">Allergy - Alternative found</p>
-                    <p class="alternative-name">↳ {{ item.alternative }}</p>
-                </div>
-                {% else %}
-                <p class="item-name">{{ item.name }}</p>
-                {% endif %}
-            </div>
-            <span class="item-quantity">{{ item.quantity }}</span>
-        </article>
-        {% endfor %}
+                <span class="item-quantity">{{ item.quantity }}</span>
+            </article>
+            {% endfor %}
+        </div>
     </main>
 
     <footer class="action-container">
@@ -331,71 +335,24 @@
     </footer>
 </section>
 
+<!-- Include Sortable.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 <script>
-    let draggedItem = null;
-    let placeholder = null;
+    // Initialize Sortable.js
+    const mustHaveContainer = document.getElementById('mustHaveContainer');
+    const niceToHaveContainer = document.getElementById('niceToHaveContainer');
 
-    function dragStart(event) {
-        draggedItem = event.target;
-        event.target.classList.add('dragging');
-        placeholder = document.createElement('div');
-        placeholder.className = 'list-item placeholder';
-        placeholder.style.height = `${event.target.offsetHeight}px`;
-    }
+    const sortableMustHave = new Sortable(mustHaveContainer, {
+        group: 'shared',
+        animation: 150,
+        ghostClass: 'dragging',
+    });
 
-    function dragOver(event) {
-        event.preventDefault();
-        const container = document.getElementById('listContainer');
-        const afterElement = getDragAfterElement(container, event.clientY);
-        if (afterElement == null) {
-            container.appendChild(placeholder);
-        } else {
-            container.insertBefore(placeholder, afterElement);
-        }
-    }
-
-    function drop(event) {
-        event.preventDefault();
-        const container = document.getElementById('listContainer');
-        container.insertBefore(draggedItem, placeholder);
-        placeholder.remove();
-    }
-
-    function dragEnd(event) {
-        event.target.classList.remove('dragging');
-        placeholder.remove();
-        draggedItem = null;
-        placeholder = null;
-    }
-
-    function getDragAfterElement(container, y) {
-        const draggableElements = [...container.querySelectorAll('.list-item:not(.dragging)')];
-
-        return draggableElements.reduce((closest, child) => {
-            const box = child.getBoundingClientRect();
-            const offset = y - box.top - box.height / 2;
-            if (offset < 0 && offset > closest.offset) {
-                return { offset: offset, element: child };
-            } else {
-                return closest;
-            }
-        }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-    function touchStart(event) {
-        const touch = event.touches[0];
-        dragStart({ target: event.target, clientY: touch.clientY });
-    }
-
-    function touchMove(event) {
-        const touch = event.touches[0];
-        dragOver({ preventDefault: event.preventDefault, clientY: touch.clientY });
-    }
-
-    function touchEnd(event) {
-        drop({ preventDefault: event.preventDefault });
-        dragEnd({ target: draggedItem });
-    }
+    const sortableNiceToHave = new Sortable(niceToHaveContainer, {
+        group: 'shared',
+        animation: 150,
+        ghostClass: 'dragging',
+    });
 
     function toggleCheck(element) {
         const checkbox = element.querySelector('.custom-checkbox');
