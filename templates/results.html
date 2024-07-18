@@ -346,12 +346,21 @@
         group: 'shared',
         animation: 150,
         ghostClass: 'dragging',
+        delay: 100,
+        touchStartThreshold: 5,
+        onStart: function(evt) {
+            if (evt.item.classList.contains('list-title')) {
+                evt.preventDefault();
+            }
+        },
     });
 
     const sortableNiceToHave = new Sortable(niceToHaveContainer, {
         group: 'shared',
         animation: 150,
         ghostClass: 'dragging',
+        delay: 100,
+        touchStartThreshold: 5,
     });
 
     function toggleCheck(element) {
