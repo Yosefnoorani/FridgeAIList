@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="test drag and drop results.html v3">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="fix design of icons">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/scan_fridge.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/scan_fridge.html" afterDir="false" />
     </list>
@@ -119,14 +119,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1718525984733</updated>
-    </task>
-    <task id="LOCAL‎-00006" summary="add new design to setup added the drawer with the funcationaly v1">
-      <option name="closed" value="true" />
-      <created>1718831593557</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL‎-00006" />
-      <option name="project" value="LOCAL‎" />
-      <updated>1718831593557</updated>
     </task>
     <task id="LOCAL‎-00007" summary="add yaml">
       <option name="closed" value="true" />
@@ -512,7 +504,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1721305534101</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL‎-00055" summary="fix design of icons">
+      <option name="closed" value="true" />
+      <created>1721550273945</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL‎-00055" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1721550273945</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -527,7 +527,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix the black button" />
     <MESSAGE value="add backend DFI" />
     <MESSAGE value="add backend DFI ה1" />
     <MESSAGE value="icon of uplaod from device" />
@@ -552,7 +551,8 @@
     <MESSAGE value="test drag and drop results.html" />
     <MESSAGE value="test drag and drop results.html v2" />
     <MESSAGE value="test drag and drop results.html v3" />
-    <option name="LAST_COMMIT_MESSAGE" value="test drag and drop results.html v3" />
+    <MESSAGE value="fix design of icons" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix design of icons" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
