@@ -256,7 +256,7 @@
                 <img src="{{ url_for('static', filename='camera-switch-icon.svg') }}" alt="Switch Camera" style="width: 30px; height: 30px;">
             </button>
             <div class="overlay-text">
-                Please capture at least 4 to 7 images of your fridge.
+                Please capture at least 4 to 8 images of your fridge.
             </div>
             <button class="device-upload-button" onclick="document.getElementById('fileInput').click()" aria-label="Upload from Device">
                 <img src="/static/upload-icon.svg" alt="Upload from Device" style="width: 30px; height: 30px;">
@@ -290,53 +290,64 @@
         <p id="errorMessage">{{ error_message }}</p>
         <button onclick="closeErrorPopup()">Close</button>
     </div>
-    <script>
-        const mustNiceAllergyList = {{ must_nice_allergy_list | tojson | safe }} || {};
+<script>
+    const mustNiceAllergyList = {{ must_nice_allergy_list | tojson | safe }} || {};
 
-        document.getElementById('mustNiceAllergyList').value = JSON.stringify(mustNiceAllergyList);
+    document.getElementById('mustNiceAllergyList').value = JSON.stringify(mustNiceAllergyList);
 
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const captureButton = document.getElementById('capture');
-        const uploadButton = document.getElementById('upload');
-        const counter = document.getElementById('counter');
-        const imageDataInput = document.getElementById('imageData');
-        const uploadForm = document.getElementById('uploadForm');
-        const thumbnail = document.getElementById('thumbnail');
-        const galleryModal = document.getElementById('galleryModal');
-        const galleryImage = document.getElementById('galleryImage');
-        const imageLabel = document.getElementById('imageLabel');
-        const switchCameraButton = document.getElementById('switchCamera');
-        const deviceUploadButton = document.getElementsByClassName('device-upload-button')[0];
-        const loader = document.getElementById('loader');
-        let images = [];
-        let currentImageIndex = -1;
-        let currentFacingMode = 'environment';
-        let stream = null;
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('capture');
+    const uploadButton = document.getElementById('upload');
+    const counter = document.getElementById('counter');
+    const imageDataInput = document.getElementById('imageData');
+    const uploadForm = document.getElementById('uploadForm');
+    const thumbnail = document.getElementById('thumbnail');
+    const galleryModal = document.getElementById('galleryModal');
+    const galleryImage = document.getElementById('galleryImage');
+    const imageLabel = document.getElementById('imageLabel');
+    const switchCameraButton = document.getElementById('switchCamera');
+    const deviceUploadButton = document.getElementsByClassName('device-upload-button')[0];
+    const loader = document.getElementById('loader');
+    let images = [];
+    let currentImageIndex = -1;
+    let currentFacingMode = 'environment';
+    let stream = null;
 
-        async function startVideo(facingMode) {
-            try {
-                if (stream) {
-                    stream.getTracks().forEach(track => track.stop());
-                }
-                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } });
-                video.srcObject = stream;
-            } catch (err) {
-                console.error('Error accessing camera: ', err);
-                if (facingMode === 'environment') {
-                    startVideo('user');
-                } else {
-                    alert('Error accessing camera. Please check your camera settings.');
-                }
+    async function startVideo(facingMode) {
+        try {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } });
+            video.srcObject = stream;
+        } catch (err) {
+            console.error('Error accessing camera: ', err);
+            if (facingMode === 'environment') {
+                startVideo('user');
+            } else {
+                alert('Error accessing camera. Please check your camera settings.');
             }
         }
+    }
 
-        switchCameraButton.addEventListener('click', async () => {
-            currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
-            await startVideo(currentFacingMode);
-        });
+    switchCameraButton.addEventListener('click', async () => {
+        currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
+        await startVideo(currentFacingMode);
+    });
 
-        captureButton.addEventListener('click', () => {
+    captureButton.addEventListener('click', () => {
+        //if (!captureButton.disabled) {
+            //captureButton.disabled = true; // Disable the button immediately after the click
+        captureImage();
+            //setTimeout(() => {
+            //    captureButton.disabled = false; // Re-enable the button after a short delay
+            //}, 500); // Adjust the delay as needed
+        //}
+    });
+
+    function captureImage() {
+        if (images.length < 8) {
             const context = canvas.getContext('2d');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -347,160 +358,141 @@
             if (images.length >= 4) {
                 uploadButton.disabled = false;
             }
-            if (images.length >= 7) {
+            if (images.length >= 8) {
                 captureButton.disabled = true;
             }
             imageDataInput.value = JSON.stringify(images);
             updateThumbnail();
             showCaptureFeedback();
-        });
-
-        uploadButton.addEventListener('click', () => {
-            uploadForm.submit();
-        });
-
-        function updateThumbnail() {
-            if (images.length > 0) {
-                thumbnail.src = images[images.length - 1];
-                thumbnail.style.display = 'block';
-                updateImageLabel();
-            }
         }
+    }
 
-        function showCaptureFeedback() {
-            captureButton.style.backgroundColor = 'green';
-            setTimeout(() => {
-                captureButton.style.backgroundColor = 'white';
-            }, 200);
-        }
+    uploadButton.addEventListener('click', () => {
+        uploadForm.submit();
+    });
 
-        function openGallery() {
-            galleryModal.style.display = 'block';
-            currentImageIndex = images.length - 1;
-            galleryImage.src = images[currentImageIndex];
+    function updateThumbnail() {
+        if (images.length > 0) {
+            thumbnail.src = images[images.length - 1];
+            thumbnail.style.display = 'block';
             updateImageLabel();
         }
+    }
 
-        function closeGallery() {
-            galleryModal.style.display = 'none';
-        }
+    function showCaptureFeedback() {
+        captureButton.style.backgroundColor = 'green';
+        setTimeout(() => {
+            captureButton.style.backgroundColor = 'white';
+        }, 200);
+    }
 
-        function deleteImage() {
-            if (currentImageIndex > -1) {
-                images.splice(currentImageIndex, 1);
-                if (images.length === 0) {
-                    thumbnail.style.display = 'none';
-                    closeGallery();
-                } else {
-                    currentImageIndex = Math.min(currentImageIndex, images.length - 1);
-                    galleryImage.src = images[currentImageIndex];
-                    updateImageLabel();
-                }
-                counter.textContent = images.length;
-                if (images.length < 4) {
-                    uploadButton.disabled = true;
-                }
-                captureButton.disabled = false;
-                imageDataInput.value = JSON.stringify(images);
-            }
-        }
+    function openGallery() {
+        galleryModal.style.display = 'block';
+        currentImageIndex = images.length - 1;
+        galleryImage.src = images[currentImageIndex];
+        updateImageLabel();
+    }
 
-        function changeImage(direction) {
-            if (images.length > 0) {
-                currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+    function closeGallery() {
+        galleryModal.style.display = 'none';
+    }
+
+    function deleteImage() {
+        if (currentImageIndex > -1) {
+            images.splice(currentImageIndex, 1);
+            if (images.length === 0) {
+                thumbnail.style.display = 'none';
+                closeGallery();
+            } else {
+                currentImageIndex = Math.min(currentImageIndex, images.length - 1);
                 galleryImage.src = images[currentImageIndex];
                 updateImageLabel();
             }
-        }
-
-        function updateImageLabel() {
-            if (images.length > 0) {
-                imageLabel.textContent = ${currentImageIndex + 1} / ${images.length};
-            }
-        }
-
-        async function handleFiles(files) {
-            for (let i = 0; i < files.length; i++) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    images.push(e.target.result);
-                    counter.textContent = images.length;
-                    if (images.length >= 4) {
-                        uploadButton.disabled = false;
-                    }
-                    if (images.length >= 7) {
-                        captureButton.disabled = true;
-                    }
-                    imageDataInput.value = JSON.stringify(images);
-                    updateThumbnail();
-                    showCaptureFeedback();
-                };
-                reader.readAsDataURL(files[i]);
-            }
-        }
-
-        function rescan() {
-            window.location.href = '/scan_fridge';
-        }
-
-        startVideo(currentFacingMode);
-
-        // Display error popup if error_message is set
-        window.onload = function() {
-            const errorMessage = "{{ error_message }}";
-            if (errorMessage) {
-                const errorPopup = document.getElementById('errorPopup');
-                const errorMessageElement = document.getElementById('errorMessage');
-                errorMessageElement.textContent = errorMessage;
-                errorPopup.style.display = 'block';
-            }
-        }
-
-        function closeErrorPopup() {
-            const errorPopup = document.getElementById('errorPopup');
-            errorPopup.style.display = 'none';
-        }
-
-        function showLoader() {
-            loader.classList.add('open');
-            captureButton.disabled = true;
-            uploadButton.disabled = true;
-        }
-
-        // Function to hide the loader and enable buttons
-        function hideLoader() {
-            loader.classList.remove('open');
-            captureButton.disabled = images.length >= 7; // Re-enable based on images count
-            uploadButton.disabled = images.length < 4;  // Re-enable based on images count
-        }
-
-        uploadButton.addEventListener('click', () => {
-            showLoader();
-            setTimeout(() => {
-                uploadForm.submit();
-            }, 10000000); // Simulating an upload process; remove this line in production
-        });
-
-        captureButton.addEventListener('click', () => {
-            showLoader();
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imageData = canvas.toDataURL('image/png');
-            images.push(imageData);
             counter.textContent = images.length;
-            if (images.length >= 4) {
-                uploadButton.disabled = false;
+            if (images.length < 4) {
+                uploadButton.disabled = true;
             }
-            if (images.length >= 7) {
-                captureButton.disabled = true;
-            }
+            captureButton.disabled = images.length >= 8;
             imageDataInput.value = JSON.stringify(images);
-            updateThumbnail();
-            showCaptureFeedback();
-            hideLoader();
-        });
-    </script>
+        }
+    }
+
+    function changeImage(direction) {
+        if (images.length > 0) {
+            currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+            galleryImage.src = images[currentImageIndex];
+            updateImageLabel();
+        }
+    }
+
+    function updateImageLabel() {
+        if (images.length > 0) {
+            imageLabel.textContent = `${currentImageIndex + 1} / ${images.length}`;
+        }
+    }
+
+    async function handleFiles(files) {
+        for (let i = 0; i < files.length && images.length < 8; i++) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                images.push(e.target.result);
+                counter.textContent = images.length;
+                if (images.length >= 4) {
+                    uploadButton.disabled = false;
+                }
+                if (images.length >= 8) {
+                    captureButton.disabled = true;
+                }
+                imageDataInput.value = JSON.stringify(images);
+                updateThumbnail();
+                showCaptureFeedback();
+            };
+            reader.readAsDataURL(files[i]);
+        }
+    }
+
+    function rescan() {
+        window.location.href = '/scan_fridge';
+    }
+
+    startVideo(currentFacingMode);
+
+    // Display error popup if error_message is set
+    window.onload = function() {
+        const errorMessage = "{{ error_message }}";
+        if (errorMessage) {
+            const errorPopup = document.getElementById('errorPopup');
+            const errorMessageElement = document.getElementById('errorMessage');
+            errorMessageElement.textContent = errorMessage;
+            errorPopup.style.display = 'block';
+        }
+    }
+
+    function closeErrorPopup() {
+        const errorPopup = document.getElementById('errorPopup');
+        errorPopup.style.display = 'none';
+    }
+
+    function showLoader() {
+        loader.classList.add('open');
+        captureButton.disabled = true;
+        uploadButton.disabled = true;
+    }
+
+    // Function to hide the loader and enable buttons
+    function hideLoader() {
+        loader.classList.remove('open');
+        captureButton.disabled = images.length >= 8; // Re-enable based on images count
+        uploadButton.disabled = images.length < 4;  // Re-enable based on images count
+    }
+
+    uploadButton.addEventListener('click', () => {
+        showLoader();
+        setTimeout(() => {
+            uploadForm.submit();
+        }, 10000000); // Simulating an upload process; remove this line in production
+    });
+</script>
+
 </body>
 </html>

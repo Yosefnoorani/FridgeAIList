@@ -120,22 +120,6 @@
       <option name="presentableId" value="Default" />
       <updated>1718525984733</updated>
     </task>
-    <task id="LOCAL‎-00007" summary="add yaml">
-      <option name="closed" value="true" />
-      <created>1718833740387</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL‎-00007" />
-      <option name="project" value="LOCAL‎" />
-      <updated>1718833740387</updated>
-    </task>
-    <task id="LOCAL‎-00008" summary="add gunicorn==21.2.0">
-      <option name="closed" value="true" />
-      <created>1718868418408</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL‎-00008" />
-      <option name="project" value="LOCAL‎" />
-      <updated>1718868418408</updated>
-    </task>
     <task id="LOCAL‎-00009" summary="update the yaml">
       <option name="closed" value="true" />
       <created>1718874071262</created>
@@ -512,7 +496,23 @@
       <option name="project" value="LOCAL‎" />
       <updated>1721550273945</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL‎-00056" summary="fix design of icons">
+      <option name="closed" value="true" />
+      <created>1721651445984</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL‎-00056" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1721651445986</updated>
+    </task>
+    <task id="LOCAL‎-00057" summary="fix design of icons">
+      <option name="closed" value="true" />
+      <created>1721651551073</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL‎-00057" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1721651551073</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
