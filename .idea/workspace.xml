@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="fix design of icons">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="fix camera issue v1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/scan_fridge.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/scan_fridge.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/setup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/setup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +16,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -38,6 +38,7 @@
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Python.app.executor&quot;: &quot;Run&quot;,
     &quot;Python.detected_fridge_items.executor&quot;: &quot;Run&quot;,
+    &quot;Python.video_maker.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
@@ -93,13 +94,37 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="video_maker" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="FridgeAIList" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/video_maker.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
+      <item itemvalue="Python.video_maker" />
       <item itemvalue="Python.app" />
       <item itemvalue="Python.detected_fridge_items" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.app" />
+        <item itemvalue="Python.video_maker" />
         <item itemvalue="Python.detected_fridge_items" />
       </list>
     </recent_temporary>
@@ -119,14 +144,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1718525984733</updated>
-    </task>
-    <task id="LOCAL‎-00009" summary="update the yaml">
-      <option name="closed" value="true" />
-      <created>1718874071262</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL‎-00009" />
-      <option name="project" value="LOCAL‎" />
-      <updated>1718874071262</updated>
     </task>
     <task id="LOCAL‎-00010" summary="add tmp/upload folder">
       <option name="closed" value="true" />
@@ -512,7 +529,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1721651551073</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL‎-00058" summary="fix camera issue v1">
+      <option name="closed" value="true" />
+      <created>1721654729017</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL‎-00058" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1721654729019</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -527,7 +552,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add backend DFI" />
     <MESSAGE value="add backend DFI ה1" />
     <MESSAGE value="icon of uplaod from device" />
     <MESSAGE value="secret api key" />
@@ -552,7 +576,8 @@
     <MESSAGE value="test drag and drop results.html v2" />
     <MESSAGE value="test drag and drop results.html v3" />
     <MESSAGE value="fix design of icons" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix design of icons" />
+    <MESSAGE value="fix camera issue v1" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix camera issue v1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
