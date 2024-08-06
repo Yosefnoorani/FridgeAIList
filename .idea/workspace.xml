@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="fix camera issue v1">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="fix design 06/08">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/results.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/results.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/setup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/setup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,14 +144,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1718525984733</updated>
-    </task>
-    <task id="LOCAL‎-00011" summary="fix design setup, home">
-      <option name="closed" value="true" />
-      <created>1719088685980</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL‎-00011" />
-      <option name="project" value="LOCAL‎" />
-      <updated>1719088685980</updated>
     </task>
     <task id="LOCAL‎-00012" summary="fix the camera html switch">
       <option name="closed" value="true" />
@@ -539,7 +529,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1722352053572</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL‎-00060" summary="fix design 06/08">
+      <option name="closed" value="true" />
+      <created>1722940188253</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL‎-00060" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1722940188253</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -554,7 +552,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add backend DFI ה1" />
     <MESSAGE value="icon of uplaod from device" />
     <MESSAGE value="secret api key" />
     <MESSAGE value="secret api key v1" />
@@ -579,7 +576,8 @@
     <MESSAGE value="test drag and drop results.html v3" />
     <MESSAGE value="fix design of icons" />
     <MESSAGE value="fix camera issue v1" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix camera issue v1" />
+    <MESSAGE value="fix design 06/08" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix design 06/08" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
