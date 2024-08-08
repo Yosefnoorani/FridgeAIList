@@ -4,6 +4,7 @@ import base64
 import json
 from detected_fridge_items import generate_list
 from detected_fridge_items import get_missing_items, sanitize_items
+from google.cloud import storage
 
 
 
@@ -14,16 +15,17 @@ app.config['UPLOAD_FOLDER'] = '/tmp/uploads'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-# Path to the log file
-LOG_FILE = 'logs.json'
 
-# Ensure the log file exists
-if not os.path.exists(LOG_FILE):
-    with open(LOG_FILE, 'w') as f:
-        json.dump([], f)
+# Initialize Google Cloud Storage client
+storage_client = storage.Client()
+bucket_name = 'fridgelist_actionlogs'
+log_blob_name = 'logs.json'
+
+def get_log_blob():
+    bucket = storage_client.get_bucket(bucket_name)
+    return bucket.blob(log_blob_name)
 
 
-# Route to handle logging
 @app.route('/log', methods=['POST'])
 def log_data():
     log_entry = request.json
@@ -31,16 +33,19 @@ def log_data():
         return jsonify({'status': 'fail', 'message': 'No data provided'}), 400
 
     try:
-        # Read existing logs
-        with open(LOG_FILE, 'r') as file:
-            logs = json.load(file)
+        log_blob = get_log_blob()
+
+        # Download existing logs
+        if log_blob.exists():
+            logs = json.loads(log_blob.download_as_text())
+        else:
+            logs = []
 
         # Append new log entry
         logs.append(log_entry)
 
-        # Write logs back to the file
-        with open(LOG_FILE, 'w') as file:
-            json.dump(logs, file, indent=2)
+        # Upload logs back to Cloud Storage
+        log_blob.upload_from_string(json.dumps(logs, indent=2))
 
         return jsonify({'status': 'success', 'message': 'Log saved'}), 200
 
