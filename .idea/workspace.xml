@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="final 0908">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-    </list>
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="final 0908 v2" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -144,14 +141,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1718525984733</updated>
-    </task>
-    <task id="LOCAL‎-00016" summary="add free text input to the drawers of groceries">
-      <option name="closed" value="true" />
-      <created>1719142949372</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL‎-00016" />
-      <option name="project" value="LOCAL‎" />
-      <updated>1719142949372</updated>
     </task>
     <task id="LOCAL‎-00017" summary="add free text input to the drawers of groceries">
       <option name="closed" value="true" />
@@ -537,7 +526,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1723152928093</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL‎-00065" summary="final 0908 v2">
+      <option name="closed" value="true" />
+      <created>1723155429523</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL‎-00065" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1723155429523</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -552,7 +549,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="secret api key v2" />
     <MESSAGE value="fix 30/06" />
     <MESSAGE value="fix the calculation v1 (without the quantity)" />
     <MESSAGE value="fix the calculation v1 (without the quantity) v2" />
@@ -577,7 +573,8 @@
     <MESSAGE value="fix design 06/08 v2" />
     <MESSAGE value="add 100vh to setup" />
     <MESSAGE value="final 0908" />
-    <option name="LAST_COMMIT_MESSAGE" value="final 0908" />
+    <MESSAGE value="final 0908 v2" />
+    <option name="LAST_COMMIT_MESSAGE" value="final 0908 v2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
