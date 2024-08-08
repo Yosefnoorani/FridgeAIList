@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="fix design 06/08 v2">
+    <list default="true" id="ea481f6e-4375-4c70-89b6-094f6402322a" name="Changes" comment="add 100vh to setup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/results.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/results.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/setup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/setup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -144,14 +147,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1718525984733</updated>
-    </task>
-    <task id="LOCAL‎-00013" summary="fix the camera html switch v1">
-      <option name="closed" value="true" />
-      <created>1719092583092</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL‎-00013" />
-      <option name="project" value="LOCAL‎" />
-      <updated>1719092583092</updated>
     </task>
     <task id="LOCAL‎-00014" summary="fix the camera html switch v1">
       <option name="closed" value="true" />
@@ -537,7 +532,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1722954432437</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL‎-00062" summary="add 100vh to setup">
+      <option name="closed" value="true" />
+      <created>1723122645316</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL‎-00062" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1723122645317</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -552,7 +555,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="secret api key" />
     <MESSAGE value="secret api key v1" />
     <MESSAGE value="secret api key v2" />
     <MESSAGE value="fix 30/06" />
@@ -577,7 +579,8 @@
     <MESSAGE value="fix camera issue v1" />
     <MESSAGE value="fix design 06/08" />
     <MESSAGE value="fix design 06/08 v2" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix design 06/08 v2" />
+    <MESSAGE value="add 100vh to setup" />
+    <option name="LAST_COMMIT_MESSAGE" value="add 100vh to setup" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

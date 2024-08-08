@@ -330,8 +330,8 @@
     </main>
 
     <footer class="action-container">
-        <button class="share-button" onclick="shareList()">Share List</button>
-        <button class="share-page-button" onclick="sharePage()">Share Page</button>
+        <button class="share-button" onclick="shareList(); logUserAction('share_list')">Share List</button>
+        <button class="share-page-button" onclick="sharePage(); logUserAction('share_page')">Share Page</button>
         <button class="rescan-button" onclick="rescan()">Rescan</button>
     </footer>
 </section>
@@ -377,10 +377,21 @@
     function shareList() {
         const listItems = document.querySelectorAll('.list-item');
         const items = Array.from(listItems).map(item => {
-            const itemName = item.querySelector('.item-name').textContent;
+            const itemNameElement = item.querySelector('.item-name');
             const itemQuantity = item.querySelector('.item-quantity').textContent;
+
+            let itemName = itemNameElement.textContent;
+
+            // Check for allergy alternative
+            const alternativeElement = item.querySelector('.alternative-name');
+            if (alternativeElement) {
+                const alternativeName = alternativeElement.textContent.trim();
+                itemName = `*${alternativeName}* (Alternative for ${itemName})`;
+            }
+
             return `${itemName}: ${itemQuantity}`;
         });
+
         const shareData = {
             title: 'Grocery List',
             text: `Missing items:\n${items.join('\n')}`
@@ -396,7 +407,6 @@
             alert('Sharing is not supported on this browser');
         }
     }
-
     function sharePage() {
         const url = window.location.href;
         const shareData = {
@@ -418,6 +428,37 @@
     function rescan() {
         window.location.href = '/scan_fridge';
     }
+
+    window.onload = function() {
+            logUserDetails('results_page_load');
+    };
+
+    function logUserAction(actionType) {
+            logUserDetails(actionType);
+    }
+
+    async function logUserDetails(action) {
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipResponse.json();
+            const userIP = ipData.ip;
+            const userAgent = navigator.userAgent;
+            const timestamp = new Date().toISOString();
+
+            const logData = {
+                ip: userIP,
+                browser: userAgent,
+                time: timestamp,
+                action: action
+            };
+
+            fetch('/log', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(logData)
+            });
+        }
 </script>
 </body>
 </html>

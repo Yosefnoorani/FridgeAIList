@@ -84,8 +84,40 @@
         <div class="overlay">
             <h1>FridgeList</h1>
             <p class="subtitle">AI-Powered<br>Grocery Tracker</p>
-            <button class="cta-button" onclick="location.href='/setup'">Let's begin <span>&rarr;</span></button>
+            <button class="cta-button" onclick="logUserAction('setup_button_click'); location.href='/setup'">Let's begin <span>&rarr;</span></button>
         </div>
     </div>
+<script>
+        async function logUserDetails(action) {
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipResponse.json();
+            const userIP = ipData.ip;
+            const userAgent = navigator.userAgent;
+            const timestamp = new Date().toISOString();
+
+            const logData = {
+                ip: userIP,
+                browser: userAgent,
+                time: timestamp,
+                action: action
+            };
+
+            fetch('/log', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(logData)
+            });
+        }
+
+        window.onload = function() {
+            logUserDetails('home_page_load');
+        };
+
+        function logUserAction(actionType) {
+            logUserDetails(actionType);
+        }
+    </script>
 </body>
 </html>

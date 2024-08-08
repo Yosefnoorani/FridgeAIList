@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template, session
+from flask import Flask, request, redirect, url_for, render_template, session, jsonify
 import os
 import base64
 import json
@@ -13,6 +13,40 @@ app.config['UPLOAD_FOLDER'] = '/tmp/uploads'
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
+
+# Path to the log file
+LOG_FILE = 'logs.json'
+
+# Ensure the log file exists
+if not os.path.exists(LOG_FILE):
+    with open(LOG_FILE, 'w') as f:
+        json.dump([], f)
+
+
+# Route to handle logging
+@app.route('/log', methods=['POST'])
+def log_data():
+    log_entry = request.json
+    if not log_entry:
+        return jsonify({'status': 'fail', 'message': 'No data provided'}), 400
+
+    try:
+        # Read existing logs
+        with open(LOG_FILE, 'r') as file:
+            logs = json.load(file)
+
+        # Append new log entry
+        logs.append(log_entry)
+
+        # Write logs back to the file
+        with open(LOG_FILE, 'w') as file:
+            json.dump(logs, file, indent=2)
+
+        return jsonify({'status': 'success', 'message': 'Log saved'}), 200
+
+    except Exception as e:
+        print(f"Error logging data: {e}")
+        return jsonify({'status': 'fail', 'message': 'Internal server error'}), 500
 
 
 
